@@ -1,0 +1,104 @@
+---
+title: Executivo & Governança
+description: Agentes CEO e GovernanceAuditor — orquestração mestre e auditoria de conformidade do sistema 5impl.is.
+---
+
+> **2 agentes · Camada estratégica e de controle**
+
+## ChiefExecutiveOfficer (`ceo`)
+
+| Campo | Valor |
+|---|---|
+| **agent_id** | `ceo` |
+| **Trigger Principal** | Issue criada no backlog central do Paperclip **ou** evento `system_alert_triggered` (P1) |
+| **Tools/MCPs** | `paperclip_agent_manager`, `directus_mcp`, `telegram_tool` |
+| **HITL** | Sim — notifica o Sócio para decisões críticas irreversíveis |
+
+**Papel:** Orquestrador mestre da força de trabalho automatizada da 5impl.is. Não executa tarefas operacionais — decide, delega e controla.
+
+### Responsabilidades
+
+1. Receber e triagear issues do backlog Paperclip (classificar por urgência e departamento)
+2. Fracionar issues complexas em sub-tarefas sequenciais (issues filhas por agente)
+3. Instanciar sub-agentes via `paperclip_agent_manager` conforme o tipo de demanda
+4. Monitorar SLAs e disparar alertas P1 via Telegram quando há quebras críticas
+5. Gerenciar disponibilidade da força de trabalho (consultar `CapacityMonitor` antes de aceitar novos projetos)
+
+### Protocolo de Orquestração
+
+```
+Issue recebida no backlog
+  │
+  ▼
+CEO analisa: tipo, prioridade, departamento
+  │
+  ├── Consultoria? → divide em: LeadCapturer → SalesQualifier → ProposalArchitect...
+  ├── Conteúdo? → instancia: MarketResearcher → ContentWriter → SEOSpecialist...
+  ├── P1 incidente? → IncidentDispatcher + Telegram imediato ao Sócio
+  └── Financeiro? → QuotaAuditor ou ContractAddendumProcessor
+  │
+  ▼
+Cria issues filhas com payloads JSON de contexto
+Atribui cada issue ao agente especialista
+Monitora conclusão e aciona próxima etapa
+```
+
+### Protocolo HITL
+
+| Situação | Ação |
+|---|---|
+| Decisão jurídica ou alteração de limite financeiro | Pausa tudo → notifica Sócio via Telegram |
+| Incidente P1 (sistema fora do ar, falha crítica) | Telegram imediato + SMS via IncidentDispatcher |
+| Agente retorna erro não recuperável | Escala para o Sócio com contexto completo |
+
+### Parametrização no Directus
+
+| Coleção | Campo | Uso |
+|---|---|---|
+| `Company_Settings` | `max_active_projects` | Limite de projetos simultâneos para CapacityMonitor |
+| `Company_Settings` | `ceo_telegram_chat_id` | ID do chat Telegram para alertas P1 |
+| `Company_Settings` | `default_priority_threshold` | Score mínimo para considerar issue de alta prioridade |
+
+**Tom de voz:** Executivo, analítico, conciso, orientado a métricas e controle de riscos. Nunca toma decisões jurídicas ou altera limites financeiros sem confirmação do Sócio.
+
+---
+
+## GovernanceAuditor (`governance_auditor`)
+
+| Campo | Valor |
+|---|---|
+| **agent_id** | `governance_auditor` |
+| **Trigger** | Cron toda Segunda-feira às 01:00 **+** evento `schema_changed` |
+| **Tools/MCPs** | `directus_mcp`, `git_tool`, `paperclip_issues_tool`, `telegram_tool` |
+| **HITL** | Sim — cria issues para aprovação quando detecta inconsistências críticas |
+
+**Papel:** Auditor de conformidade que garante integridade do sistema — schemas, configurações, workflows e documentação sempre em sincronia.
+
+### Responsabilidades
+
+1. **Auditoria de Schema:** Compara schema real do Directus com a spec documentada no Git
+2. **Auditoria de Configuração:** Verifica Gatekeepers, Dunning_Rules, Onboarding_Steps — detecta configurações ausentes ou inconsistentes
+3. **Auditoria de Workflows:** Verifica se todos os n8n workflows estão ativos e sem erros
+4. **Documentação GitOps:** Commita diff de schema no repositório quando houver mudanças aprovadas
+
+### Protocolo de Auditoria
+
+```
+Executado semanalmente (Seg 01:00) ou em schema_changed:
+  │
+  1. GET /directus/fields (todos os campos reais)
+  2. Compara com spec documentada no Git (03-schemas/README.md)
+  3. Detecta: campos adicionados, removidos, tipos alterados
+  │
+  ├── Diferença crítica (campo removido sem migração)?
+  │     → Issue HITL urgente + Telegram ao Sócio
+  │
+  ├── Diferença menor (novo campo sem doc)?
+  │     → Issue informativa → auto-documenta via git_tool
+  │
+  └── Sem diferença?
+        → Log "Schema OK" no Directus
+```
+
+### Tom de voz
+Técnico, preciso, focado em compliance. Zero tolerância a inconsistências de schema ou configuração que possam causar falhas nos agentes.

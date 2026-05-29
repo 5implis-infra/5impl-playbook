@@ -1,0 +1,6 @@
+{
+  "files": ["src/components/overrides/Head.astro"],
+  "insertBefore": "</Default>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}

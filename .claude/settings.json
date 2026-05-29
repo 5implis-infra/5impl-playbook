@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(mgrep --web --answer \"5impl.is website color palette brand colors teal green\")",
+      "WebFetch(domain:5impl.is)",
+      "Read(//home/itbrda/dev/5impl.is/**)",
+      "Read(//tmp/**)",
+      "Bash(cp -rn /tmp/5impl-docs/. /home/itbrda/dev/5impl.is/5impl-playbook/)",
+      "Bash(cp /tmp/5impl-docs/package.json /home/itbrda/dev/5impl.is/5impl-playbook/package.json)",
+      "Bash(cp /tmp/5impl-docs/astro.config.mjs /home/itbrda/dev/5impl.is/5impl-playbook/astro.config.mjs)",
+      "Bash(cp /tmp/5impl-docs/tsconfig.json /home/itbrda/dev/5impl.is/5impl-playbook/tsconfig.json)",
+      "Bash(yes)",
+      "Bash(node .claude/skills/i-impeccable/scripts/context.mjs)"
+    ]
+  }
+}

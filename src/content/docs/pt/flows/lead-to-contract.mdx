@@ -1,0 +1,114 @@
+---
+title: Lead → Contrato
+description: Fluxo completo de captura até assinatura — Waitlist, qualificação BANT, proposta, contrato PDF e assinatura digital.
+---
+
+import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
+
+> **Captura → Qualificação → Proposta → Assinatura → Provisionamento**
+
+## Diagrama de Sequência
+
+<MermaidDiagram code={`sequenceDiagram
+  participant Lead
+  participant ZR as Zernio / WhatsApp
+  participant LC as LeadCapturer
+  participant WI as WaitlistIngester
+  participant LN as LeadNurturer
+  participant CM as CapacityMonitor
+  participant SQ as SalesQualifier
+  participant PA as ProposalArchitect
+  participant CC as ContractCompiler
+  participant S as Sócio (HITL)
+  participant SO as SignatureOrchestrator
+  participant CS as Clicksign
+  participant WP as WorkspaceProvisioner
+
+  alt Site Waitlist
+    Lead->>WI: POST /waitlist
+    WI->>Lead: email confirmação (Hermes)
+    WI->>LN: adiciona à sequência nurture
+    loop Nutrição D0, D3, D7, D14
+      LN->>Lead: email/WhatsApp
+    end
+  else Zernio Form / WhatsApp direto
+    Lead->>ZR: formulário ou mensagem
+    ZR->>LC: webhook
+    LC->>SQ: raw_lead_captured
+  end
+
+  Note over CM: Cron 30min
+  CM->>CM: atualiza availability_flag
+
+  SQ->>Lead: qualificação BANT via WhatsApp
+
+  alt Qualificado + Agenda disponível
+    SQ->>Lead: link Calendly
+    SQ->>PA: lead_qualified
+    PA->>PA: calcula proposta + milestones
+    PA->>CC: proposal_drafted
+    CC->>CC: gera PDF via Puppeteer
+    CC->>S: Issue HITL: "Revisar proposta"
+    S->>CC: proposal_approved
+    CC->>SO: proposal_approved
+    SO->>CS: upload PDF + configura assinadores
+    CS-->>SO: signing_link
+    SO->>Lead: email com link de assinatura
+    CS-->>SO: webhook signature_completed
+    SO->>WP: proposal_signed
+  else Agenda cheia
+    SQ->>Lead: "Fila prioritária para próximo mês"
+  else Desqualificado
+    SQ->>LN: sequência nurture disqualified
+  end`} caption="Fluxo Lead → Contrato completo" />
+
+## Estados do Lead
+
+```
+new → nurturing → qualified → [won | lost | disqualified]
+         ↑
+    (requalifica após nurture)
+```
+
+## Sequência de Nutrição — Configuração no Directus
+
+### `Lead_Nurture_Sequences`
+| Campo | Tipo | Exemplo |
+|---|---|---|
+| `name` | string | "Waitlist Business PT" |
+| `vertical` | enum | `business` / `church` / `media` |
+| `trigger` | enum | `waitlist_signup` / `disqualified` |
+
+### `Lead_Nurture_Steps`
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `step_order` | int | Ordem de envio |
+| `delay_days` | int | Dias após o step anterior |
+| `channel` | enum | `email` / `whatsapp` |
+| `subject_template` | string | Assunto com variáveis |
+| `body_template` | string | Corpo com `{name}`, `{company}`, `{vertical}` |
+
+## Qualificação BANT (SalesQualifier)
+
+| Dimensão | Pergunta padrão | Qualificador |
+|---|---|---|
+| **Budget** | "Qual o orçamento disponível para o projeto?" | > R$3k |
+| **Authority** | "Você é o decisor ou precisa de aprovação?" | Decisor direto |
+| **Need** | "Qual o principal processo que você quer automatizar?" | Dor clara e urgente |
+| **Timeline** | "Para quando você precisa implementado?" | < 90 dias |
+
+## Estrutura da Proposta (Directus)
+
+```typescript
+interface Proposal {
+  id: string
+  deal_id: string
+  company_id: string
+  status: 'draft' | 'sent' | 'approved' | 'signed' | 'rejected'
+  total_value: number
+  pdf_url?: string
+  signed_at?: datetime
+  items: ProposalItem[]          // serviços cotados
+  milestones: ConsultingMilestone[] // entregas e valores
+}
+```

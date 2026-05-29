@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 36" fill="none" height="36">
+  <defs>
+    <linearGradient id="grad-l" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7B3FE4"/>
+      <stop offset="100%" stop-color="#C84BE8"/>
+    </linearGradient>
+  </defs>
+  <text x="2" y="27" font-family="Syne, sans-serif" font-weight="800" font-size="26" fill="url(#grad-l)">5</text>
+  <text x="18" y="27" font-family="Syne, sans-serif" font-weight="700" font-size="22" fill="#111111">impl.is</text>
+  <text x="104" y="22" font-family="Inter, sans-serif" font-weight="500" font-size="9" fill="#666688" letter-spacing="1">PLAYBOOK</text>
+</svg>

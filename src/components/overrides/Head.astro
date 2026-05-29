@@ -1,0 +1,50 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+---
+<Default {...Astro.props}>
+  <slot />
+</Default>
+
+<!-- Mermaid: initialize after DOM ready, re-init on Astro view transitions -->
+<script>
+  import mermaid from 'mermaid'
+
+  function getMermaidTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'light'
+      ? 'default'
+      : 'dark'
+  }
+
+  function initMermaid() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: getMermaidTheme(),
+      securityLevel: 'loose',
+      fontFamily: 'Inter, ui-sans-serif, system-ui',
+      fontSize: 13,
+      flowchart: { curve: 'basis', padding: 20 },
+      sequence: { showSequenceNumbers: false },
+    })
+  }
+
+  async function renderAll() {
+    const wrappers = document.querySelectorAll<HTMLElement>('.mermaid-wrapper[data-mermaid]')
+    for (const wrapper of wrappers) {
+      const code = wrapper.getAttribute('data-mermaid')!
+      const uid = `m${Math.random().toString(36).slice(2, 8)}`
+      try {
+        const { svg } = await mermaid.render(uid, code)
+        wrapper.innerHTML = svg
+      } catch (err) {
+        wrapper.innerHTML = `<pre style="color:#ff6b6b;font-size:0.8rem">${String(err)}</pre>`
+      }
+    }
+  }
+
+  initMermaid()
+  document.addEventListener('DOMContentLoaded', renderAll)
+
+  // Re-run after Astro view transitions and theme changes
+  document.addEventListener('astro:page-load', () => { initMermaid(); renderAll() })
+  document.addEventListener('astro:after-swap', () => { initMermaid(); renderAll() })
+</script>

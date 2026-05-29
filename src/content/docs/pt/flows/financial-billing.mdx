@@ -1,0 +1,110 @@
+---
+title: Billing & Tokens
+description: Fluxo de governança de tokens LiteLLM — quota monitoring, gatekeepers, recargas e relatório financeiro mensal.
+---
+
+import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
+
+> **Quota Monitoring → Gatekeepers → Recargas → Relatório Financeiro**
+
+## Loop de Quota (LiteLLM)
+
+<MermaidDiagram code={`sequenceDiagram
+  participant LL as LiteLLM Proxy
+  participant QA as QuotaAuditor (15min)
+  participant DIR as Directus 5impl
+  participant BG as BillingGatekeeper
+  participant Client as Cliente / Sócio
+  participant GW as Gateway
+
+  Note over QA: Cron a cada 15 minutos
+  QA->>LL: GET /usage (todos os Virtual Keys)
+  LL-->>QA: logs por key/model/tag
+  QA->>DIR: salva Token_Usage
+  QA->>BG: quota_updated (percentage_used, cost_usd)
+
+  BG->>DIR: busca Gatekeepers ordenados por threshold
+  loop Para cada Gatekeeper aplicável
+    alt action = notify
+      BG->>Client: "Créditos atingiram X%"
+    else action = soft_block
+      BG->>Client: alerta crítico
+      BG->>Client: Telegram ao Sócio
+    else action = hard_block
+      BG->>LL: desabilita Virtual Key
+      BG->>Client: "Créditos esgotados. Recarregue."
+    end
+  end`} caption="Loop de monitoramento de quota de tokens" />
+
+## Fluxo de Recarga de Créditos
+
+<MermaidDiagram code={`sequenceDiagram
+  participant Client as Cliente
+  participant GW as Gateway Financeiro
+  participant CAP as ContractAddendumProcessor
+  participant LL as LiteLLM API
+  participant DIR as Directus 5impl
+  participant HM as Hermes
+
+  Client->>GW: compra pacote de créditos
+  GW->>CAP: webhook payment_confirmed (ai_credits, workspace_id)
+
+  Note over CAP: 3 tarefas atômicas
+  CAP->>LL: incrementa quota Virtual Key
+  LL-->>CAP: quota atualizada
+  CAP->>DIR: insere Contract_Addendum
+  CAP->>GW: recalcula assinatura (base + addendums)
+  GW-->>CAP: assinatura atualizada
+  CAP->>HM: email confirmação ao cliente`} caption="Fluxo de recarga de créditos de IA" />
+
+## Configuração de Gatekeepers (Directus)
+
+```typescript
+interface Gatekeeper {
+  id: string
+  name: string
+  threshold: number        // % de uso (ex: 80)
+  action: 'notify' | 'soft_block' | 'hard_block'
+  channel: 'email' | 'whatsapp' | 'both'
+  template_key: string     // ex: "quota_warning_80"
+  applies_to: 'all' | 'client' | 'church' | 'internal'
+  active: boolean
+}
+```
+
+### Configuração Padrão
+
+| threshold | action | channel | Destinatário |
+|---|---|---|---|
+| 70% | `notify` | `email` | Cliente |
+| 85% | `notify` | `whatsapp` | Cliente + Sócio (Telegram) |
+| 95% | `soft_block` | `both` | Cliente + Sócio urgente |
+| 100% | `hard_block` | `both` | Desabilita + notifica |
+
+## Schema Token_Usage (Directus)
+
+```typescript
+interface TokenUsage {
+  id: string
+  workspace_id: string      // Virtual Key slug
+  virtual_key_id: string    // LiteLLM VKey ID
+  model: string             // ex: "claude-3-5-sonnet"
+  agent_tag: string         // ex: "editorial.content_writer"
+  tokens_input: number
+  tokens_output: number
+  cost_usd: number
+  recorded_at: datetime
+}
+```
+
+## Relatório Financeiro Mensal
+
+O `FinancialReporter` consolida no dia 1 de cada mês:
+
+| Métrica | Fórmula |
+|---|---|
+| **MRR** | Σ Church_Subscriptions.monthly_value + Σ Consulting recorrente |
+| **Custo de tokens** | Σ Token_Usage.cost_usd (mês) |
+| **Margem bruta** | MRR − custo_tokens − overhead |
+| **Custo por agente** | Σ cost_usd GROUP BY agent_tag |
+| **ROI por cliente** | MRR_cliente / custo_tokens_cliente |

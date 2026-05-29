@@ -1,0 +1,14 @@
+---
+interface Props {
+  code: string
+  caption?: string
+}
+const { code, caption } = Astro.props
+const encoded = code.trim()
+---
+<figure class="mermaid-wrapper" data-mermaid={encoded} aria-label={caption}>
+  <noscript>
+    <pre class="not-content" style="font-size:0.75rem;padding:1rem;overflow:auto">{encoded}</pre>
+  </noscript>
+  {caption && <figcaption style="text-align:center;font-size:0.78rem;margin-top:0.5rem;color:var(--sl-color-gray-2)">{caption}</figcaption>}
+</figure>

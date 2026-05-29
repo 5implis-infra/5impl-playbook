@@ -1,0 +1,79 @@
+---
+title: Catálogo de Agentes
+description: Referência rápida de todos os 41 agentes — 7 departamentos, triggers, arquivos de spec e ferramentas MCP.
+---
+
+> **41 agentes · 7 departamentos · Todos rodam no Paperclip**
+
+## Índice por Departamento
+
+| # | agent_id | Departamento | Trigger | Arquivo |
+|---|---|---|---|---|
+| 1 | `ceo` | Executivo | Issue no backlog / `system_alert_triggered` | [Executivo](/agents/executive/) |
+| 2 | `governance_auditor` | Executivo | Cron Seg 01:00 / `schema_changed` | [Executivo](/agents/executive/) |
+| 3 | `editorial_planner` | Editorial | Cron dia 1 de cada mês 07:00 | [Editorial](/agents/editorial/) |
+| 4 | `market_researcher` | Editorial | `editorial_schedule_triggered` | [Editorial](/agents/editorial/) |
+| 5 | `content_writer` | Editorial | `research_completed` | [Editorial](/agents/editorial/) |
+| 6 | `seo_specialist` | Editorial | `article_written` | [Editorial](/agents/editorial/) |
+| 7 | `draft_publisher` | Editorial | `article_seo_ready` | [Editorial](/agents/editorial/) |
+| 8 | `image_director` | Editorial | `draft_created` / `social_assets_needed` | [Editorial](/agents/editorial/) |
+| 9 | `editorial_gatekeeper` | Editorial | `draft_created` / `social_post_drafted` | [Editorial](/agents/editorial/) |
+| 10 | `static_site_publisher` | Editorial | `content_approved` | [Editorial](/agents/editorial/) |
+| 11 | `social_media_strategist` | Editorial | `content_published` | [Editorial](/agents/editorial/) |
+| 12 | `linkedin_copywriter` | Editorial | Delegado pelo `social_media_strategist` | [Editorial](/agents/editorial/) |
+| 13 | `instagram_copywriter` | Editorial | Delegado pelo `social_media_strategist` | [Editorial](/agents/editorial/) |
+| 14 | `newsletter_editor` | Editorial | `content_published` | [Editorial](/agents/editorial/) |
+| 15 | `newsletter_dispatcher` | Editorial | `newsletter_ready` | [Editorial](/agents/editorial/) |
+| 16 | `social_media_publisher` | Editorial | `social_approved` | [Editorial](/agents/editorial/) |
+| 17 | `content_analyst` | Editorial | Cron Segunda 08:00 | [Editorial](/agents/editorial/) |
+| 18 | `waitlist_ingester` | Vendas | Webhook POST do site | [Vendas](/agents/sales/) |
+| 19 | `lead_nurturer` | Vendas | Cron diário 08:00 / `lead_status_changed` | [Vendas](/agents/sales/) |
+| 20 | `lead_capturer` | Vendas | Webhook Zernio | [Vendas](/agents/sales/) |
+| 21 | `capacity_monitor` | Vendas | `issue_status_changed` / Cron 30min | [Vendas](/agents/sales/) |
+| 22 | `sales_qualifier` | Vendas | `raw_lead_captured` / WhatsApp inbound | [Vendas](/agents/sales/) |
+| 23 | `proposal_architect` | Vendas | `lead_qualified` | [Vendas](/agents/sales/) |
+| 24 | `contract_compiler` | Vendas | `proposal_drafted` | [Vendas](/agents/sales/) |
+| 25 | `signature_orchestrator` | Vendas | `proposal_approved` | [Vendas](/agents/sales/) |
+| 26 | `subscription_provisioner` | SaaS Church | Webhook `payment_confirmed` (church_base) | [SaaS Church](/agents/saas-church/) |
+| 27 | `module_activator` | SaaS Church | Webhook `payment_confirmed` (addon) | [SaaS Church](/agents/saas-church/) |
+| 28 | `onboarding_orchestrator` | SaaS Church | `subscription_activated` | [SaaS Church](/agents/saas-church/) |
+| 29 | `churn_signal_detector` | SaaS Church | Cron Domingo 22:00 | [SaaS Church](/agents/saas-church/) |
+| 30 | `renewal_manager` | SaaS Church | Cron diário 07:00 | [SaaS Church](/agents/saas-church/) |
+| 31 | `dunning_manager` | SaaS Church | Webhook `payment_failed` | [SaaS Church](/agents/saas-church/) |
+| 32 | `church_reporter` | SaaS Church | Cron dia 1 de cada mês 08:00 | [SaaS Church](/agents/saas-church/) |
+| 33 | `workspace_provisioner` | Consultoria | `proposal_signed` | [Vendas](/agents/sales/) |
+| 34 | `oncall_support` | Suporte | Webhook WhatsApp inbound | [Suporte](/agents/support/) |
+| 35 | `incident_dispatcher` | Suporte | `escalation_triggered` | [Suporte](/agents/support/) |
+| 36 | `knowledge_documenter` | Suporte | Cron Domingo 23:00 | [Suporte](/agents/support/) |
+| 37 | `quota_auditor` | Financeiro | Cron a cada 15min | [Financeiro](/agents/financial/) |
+| 38 | `billing_gatekeeper` | Financeiro | `quota_updated` | [Financeiro](/agents/financial/) |
+| 39 | `contract_addendum_processor` | Financeiro | Webhook `payment_confirmed` (ai_credits) | [Financeiro](/agents/financial/) |
+| 40 | `invoice_orchestrator` | Financeiro | Issue `milestone_completed` | [Financeiro](/agents/financial/) |
+| 41 | `financial_reporter` | Financeiro | Cron dia 1 de cada mês 07:00 | [Financeiro](/agents/financial/) |
+
+## Legenda de Tools/MCPs
+
+| Tool / MCP | Usado por |
+|---|---|
+| `directus_mcp` | Leitura/escrita no Directus com inteligência contextual |
+| `paperclip_agent_manager` | CEO — instancia e gerencia sub-agentes |
+| `paperclip_issues_tool` | Cria/atualiza issues HITL no Paperclip |
+| `hermes_tool` | Envia email ou notificação via Hermes |
+| `zernio_tool` | Publica posts ou envia WhatsApp via Zernio |
+| `litellm_api_tool` | Gerencia Virtual Keys e limites no LiteLLM |
+| `gateway_api_tool` | Cria/cancela assinaturas e cobranças no gateway financeiro |
+| `clicksign_api_tool` | Upload de PDF e configuração de assinaturas |
+| `rag_tool` | Busca vetorial nos docs de suporte |
+| `web_search` | Pesquisa na web para conteúdo e tendências |
+| `git_tool` | Commits e PRs GitOps (KnowledgeDocumenter, GovernanceAuditor) |
+| `http_tool` | Chamadas HTTP genéricas (Cloudflare build, Coolify, Puppeteer) |
+| `telegram_tool` | Alertas e relatórios P1 para os sócios |
+
+## HITL — Agentes com Aprovação Humana Obrigatória
+
+| Agente | O que bloqueia | Canal de aprovação |
+|---|---|---|
+| `editorial_gatekeeper` | Publicação de post no blog | Paperclip issue + WhatsApp |
+| `editorial_gatekeeper` | Publicação de posts sociais | Paperclip issue + WhatsApp |
+| `contract_compiler` | Aprovação de proposta/contrato | Paperclip issue |
+| `workspace_provisioner` | Provisioning de workspace de cliente | Paperclip issue |

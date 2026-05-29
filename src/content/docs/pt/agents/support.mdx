@@ -1,0 +1,97 @@
+---
+title: Suporte & Infra
+description: 3 agentes de suporte — atendimento 24/7 via RAG, gestão de incidentes e documentação contínua.
+---
+
+> **3 agentes · Atendimento 24/7, gestão de incidentes e documentação GitOps**
+
+## OnCallSupport (`oncall_support`)
+
+| Campo | Valor |
+|---|---|
+| **Trigger** | Webhook de mensagem inbound no WhatsApp de suporte |
+| **Tools/MCPs** | `rag_tool`, `zernio_tool`, `directus_mcp` |
+
+Resolve dúvidas operacionais dos usuários da Church Platform via WhatsApp usando RAG sobre a documentação técnica. Escala incidentes críticos de forma imediata.
+
+### Fluxo
+
+```
+Mensagem inbound recebida no WhatsApp de suporte
+  │
+  ▼
+1. Classifica mensagem:
+   - Dúvida operacional → RAG nos docs
+   - Bug reportado → coleta contexto + escala
+   - Emergência → escala imediata
+
+2. Para dúvida operacional:
+   a. RAG em src/content/docs/ com a pergunta
+   b. Retorna resposta contextualizada
+   c. Se confiança < 0.7: escala para especialista
+
+3. Para bug ou emergência:
+   a. Coleta: descrição, horário, screenshots
+   b. Registra em Interactions no Directus
+   c. Dispara escalation_triggered
+```
+
+**Base de conhecimento:** `src/content/docs/` — atualizada automaticamente pelo `KnowledgeDocumenter` toda semana.
+
+**Palavras-chave de emergência** (configurável em `Company_Settings.support_escalation_keywords`):
+`["fora do ar", "erro crítico", "perdeu dados", "não consigo acessar", "sistema parou"]`
+
+---
+
+## IncidentDispatcher (`incident_dispatcher`)
+
+| Campo | Valor |
+|---|---|
+| **Trigger** | `escalation_triggered` (vindo do OnCallSupport) |
+| **Tools/MCPs** | `paperclip_issues_tool`, `telegram_tool`, `hermes_tool` |
+
+Triagem de severidade e abertura de incidentes com notificação proporcional à criticidade.
+
+### Classificação de Severidade
+
+| Severidade | Critério | Resposta |
+|---|---|---|
+| **P1 — Crítico** | Sistema fora do ar, perda de dados | Telegram imediato ao Sócio + issue blocker no Paperclip |
+| **P2 — Alto** | Funcionalidade principal indisponível | Issue urgente + email ao Sócio |
+| **P3 — Médio** | Bug que impacta uso mas tem workaround | Issue normal + resposta ao usuário |
+| **P4 — Baixo** | Dúvida ou melhoria | Resposta direta via OnCallSupport |
+
+### SLA por Severidade
+
+| Severidade | Tempo de Resposta | Tempo de Resolução |
+|---|---|---|
+| P1 | 15 minutos | 2 horas |
+| P2 | 1 hora | 8 horas |
+| P3 | 4 horas | 48 horas |
+| P4 | 24 horas | Best effort |
+
+---
+
+## KnowledgeDocumenter (`knowledge_documenter`)
+
+| Campo | Valor |
+|---|---|
+| **Trigger** | Cron todo Domingo às 23:00 |
+| **Tools/MCPs** | `directus_mcp`, `git_tool`, `rag_tool` |
+
+Analisa tickets de suporte da semana, identifica padrões de dúvidas recorrentes e atualiza/cria documentação no repositório Git. Garante que a base de conhecimento do RAG esteja sempre atualizada.
+
+### Fluxo
+
+```
+Domingo 23:00:
+  1. Busca Interactions da semana no Directus
+  2. Agrupa por tema/tipo de dúvida
+  3. Para temas recorrentes (3+ tickets):
+     a. Verifica se já existe doc no Git
+     b. Se não: cria novo artigo em src/content/docs/
+     c. Se sim: atualiza com novos exemplos/casos
+  4. Commit e push via git_tool:
+     "docs: update support knowledge base [auto]"
+  5. Atualiza índice do RAG
+```

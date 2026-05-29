@@ -1,0 +1,91 @@
+---
+title: Ciclo de Vida Church SaaS
+description: Fluxo completo — pagamento, ativação, onboarding, retenção, dunning e offboarding da Church Platform.
+---
+
+import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
+
+> **Pagamento → Ativação → Onboarding → Retenção → Dunning → Offboarding**
+
+## Diagrama de Sequência
+
+<MermaidDiagram code={`sequenceDiagram
+  participant GW as Gateway Financeiro
+  participant SP as SubscriptionProvisioner
+  participant CL as Coolify/Docker
+  participant DIR as Directus 5impl
+  participant Leader as Líder da Igreja
+  participant OO as OnboardingOrchestrator
+  participant CSD as ChurnSignalDetector
+  participant RM as RenewalManager
+  participant DM as DunningManager
+
+  GW->>SP: webhook payment_confirmed (church_base)
+  SP->>DIR: cria Church_Client + Church_Subscription
+  SP->>CL: provisiona instância Docker
+  CL-->>SP: instance_url + credentials
+  SP->>DIR: atualiza Church_Clients
+  SP->>Leader: WhatsApp boas-vindas + credenciais
+  SP->>OO: subscription_activated
+
+  Note over OO: Sequência de onboarding (10 dias)
+  OO->>Leader: D+0 WhatsApp: tour + credenciais
+  OO->>Leader: D+2 WhatsApp: "Cadastrou membros?"
+  OO->>Leader: D+5 Email: guia financeiro
+  OO->>Leader: D+7 WhatsApp: check-in
+  OO->>Leader: D+10 Email: call de sucesso
+
+  Note over CSD: Cron Domingo 22:00
+  CSD->>DIR: verifica last_activity_at
+  alt 14 dias inativo
+    CSD->>CSD: Telegram alerta ao Sócio
+  else 21 dias inativo
+    CSD->>Leader: email + WhatsApp reengajamento
+  end
+
+  Note over RM: Cron diário 07:00
+  RM->>Leader: lembrete 7d/3d/1d antes do vencimento
+
+  alt Renovação OK
+    GW->>SP: payment_confirmed (renovação)
+    SP->>DIR: atualiza next_billing_date
+  else Pagamento Falhou
+    GW->>DM: payment_failed
+    DM->>Leader: D+0 WhatsApp + email: aviso
+    DM->>Leader: D+3 nova tentativa + alerta
+    DM->>Leader: D+7 link atualização de cartão
+    DM->>DM: D+15 suspende acesso
+    DM->>SP: D+30 cancel_subscription
+  end`} caption="Ciclo de vida completo do assinante Church SaaS" />
+
+## Régua de Dunning (`Dunning_Rules`)
+
+| Dia | action | channel | template_key |
+|---|---|---|---|
+| 0 | `notify` | `whatsapp` + `email` | `dunning_d0` |
+| 3 | `retry` + `notify` | `whatsapp` | `dunning_d3` |
+| 7 | `notify` | `whatsapp` + `email` | `dunning_d7_critical` |
+| 15 | `soft_suspend` | `email` | `dunning_d15_suspend` |
+| 30 | `cancel` | `email` | `dunning_d30_cancel` |
+
+> Todas as regras são configuráveis via Directus — sem deploy para ajustar a cadência.
+
+## Módulos da Church Platform
+
+| Módulo | flag Directus | Plano mínimo |
+|---|---|---|
+| Membership | `module_membership` | starter |
+| Finances | `module_finances` | starter |
+| Pastoral Care | `module_pastoral` | starter |
+| Events | `module_events` | starter |
+| Campaigns | `module_campaigns` | pro |
+| Donations | `module_donations` | pro |
+| Courses | `module_courses` | pro |
+| Sermons | `module_sermons` | pro |
+| Assets | `module_assets` | pro |
+| Schedules | `module_schedules` | pro |
+| Multi-Church | `module_multi_church` | enterprise |
+| Contributor App | `module_contributor_app` | addon |
+| Leader App | `module_leader_app` | addon |
+| Project Management | `module_project_mgmt` | addon |
+| Forms | `module_forms` | addon |

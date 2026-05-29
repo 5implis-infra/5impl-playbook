@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-29T00:00:00Z",
+  "title": "Design System: 5impl.is Playbook",
+  "extensions": {
+    "colorMeta": {
+      "teal-active": {
+        "role": "primary",
+        "displayName": "Active Teal",
+        "canonical": "#00C9A7",
+        "tonalRamp": ["#001F17", "#00291F", "#003D2E", "#005240", "#006755", "#008A70", "#00C9A7", "#5EECD4"]
+      },
+      "teal-high": {
+        "role": "primary",
+        "displayName": "Teal High",
+        "canonical": "#5EECD4",
+        "tonalRamp": ["#001F17", "#00291F", "#003D2E", "#005240", "#006755", "#008A70", "#00C9A7", "#5EECD4"]
+      },
+      "teal-deep": {
+        "role": "primary",
+        "displayName": "Teal Deep",
+        "canonical": "#00291F",
+        "tonalRamp": ["#001F17", "#00291F", "#003D2E", "#005240", "#006755", "#008A70", "#00C9A7", "#5EECD4"]
+      },
+      "midnight-navy": {
+        "role": "neutral",
+        "displayName": "Midnight Navy",
+        "canonical": "#0D0D14",
+        "tonalRamp": ["#0D0D14", "#16162A", "#1E1E35", "#262640", "#2A2A45", "#3A3A60", "#6666AA", "#9999BB"]
+      },
+      "surface-elevated": {
+        "role": "neutral",
+        "displayName": "Surface Elevated",
+        "canonical": "#16162A",
+        "tonalRamp": ["#0D0D14", "#16162A", "#1E1E35", "#262640", "#2A2A45", "#3A3A60", "#6666AA", "#9999BB"]
+      },
+      "surface-overlay": {
+        "role": "neutral",
+        "displayName": "Surface Overlay",
+        "canonical": "#2A2A45",
+        "tonalRamp": ["#0D0D14", "#16162A", "#1E1E35", "#262640", "#2A2A45", "#3A3A60", "#6666AA", "#9999BB"]
+      },
+      "ink-primary": {
+        "role": "neutral",
+        "displayName": "Ink Primary",
+        "canonical": "#D8D8F0",
+        "tonalRamp": ["#0D0D14", "#16162A", "#2A2A45", "#3A3A60", "#6666AA", "#9999BB", "#D8D8F0", "#F0F0FF"]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "#9999BB",
+        "tonalRamp": ["#0D0D14", "#16162A", "#2A2A45", "#3A3A60", "#6666AA", "#9999BB", "#D8D8F0", "#F0F0FF"]
+      },
+      "purple-signal": {
+        "role": "secondary",
+        "displayName": "Purple Signal (deprecated)",
+        "canonical": "#7B3FE4",
+        "tonalRamp": ["#1A0A30", "#2D1550", "#3E1E70", "#542A95", "#6A33BB", "#7B3FE4", "#A67AEE", "#D4B8F8"]
+      }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Page h1. One per page. Index hero: max 3rem with text-wrap: balance." },
+      "headline": { "displayName": "Headline", "purpose": "Section h2. Preceded by 1px border-top and 2.5rem margin." },
+      "title":    { "displayName": "Title",    "purpose": "Subsection h3. Weight-contrast only; no border." },
+      "label":    { "displayName": "Label",    "purpose": "h4, sidebar group headers, table column headers. Uppercase, max 4 words." },
+      "body":     { "displayName": "Body",     "purpose": "All running text. 50rem max-width. text-wrap: pretty for long prose." },
+      "mono":     { "displayName": "Mono",     "purpose": "Code blocks (0.85rem) and inline code (0.82em relative)." }
+    },
+    "shadows": [
+      {
+        "name": "hero-button-hover",
+        "value": "0 8px 24px rgba(123, 63, 228, 0.35)",
+        "purpose": "Hero CTA button hover. Coupled to the purple gradient; remove when gradient is removed."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-transition",
+        "value": "150ms ease",
+        "purpose": "Default easing for color state changes (link hover, border color, text color). Never on layout properties."
+      },
+      {
+        "name": "card-lift",
+        "value": "transform 200ms ease, border-color 200ms ease",
+        "purpose": "Index page card hover only. translateY(-2px) + border-color shift to teal. Bounded to the index card grid."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "480px" },
+      { "name": "tablet", "value": "768px" },
+      { "name": "desktop", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Hero CTA. Currently purple gradient — target state is solid Active Teal with Midnight Navy text.",
+      "html": "<button class=\"ds-btn-primary\">Começar</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; background: #00C9A7; color: #0D0D14; border: none; border-radius: 0.5rem; padding: 0.6rem 1.5rem; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 150ms ease; text-decoration: none; } .ds-btn-primary:hover { opacity: 0.88; } .ds-btn-primary:focus-visible { outline: 2px solid #00C9A7; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action. Transparent with border; border and text shift to teal on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Ver documentação</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: #D8D8F0; border: 1px solid #2A2A45; border-radius: 0.5rem; padding: 0.6rem 1.5rem; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: border-color 150ms ease, color 150ms ease; text-decoration: none; } .ds-btn-ghost:hover { border-color: #00C9A7; color: #00C9A7; } .ds-btn-ghost:focus-visible { outline: 2px solid #00C9A7; outline-offset: 2px; }"
+    },
+    {
+      "name": "Sidebar Nav Link",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Primary navigation link at rest, hover, and active states.",
+      "html": "<nav class=\"ds-sidebar\"><a class=\"ds-sidebar-link\" href=\"#\">Arquitetura</a><a class=\"ds-sidebar-link ds-sidebar-link--active\" href=\"#\">Catálogo de Agentes</a><a class=\"ds-sidebar-link\" href=\"#\">Schemas</a></nav>",
+      "css": ".ds-sidebar { display: flex; flex-direction: column; gap: 2px; padding: 0.5rem 0; } .ds-sidebar-link { display: flex; align-items: center; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 400; color: #9999BB; border-radius: 0.375rem; padding: 0.3rem 0.75rem; transition: color 150ms ease, background-color 150ms ease; text-decoration: none; } .ds-sidebar-link:hover { color: #D8D8F0; background: #16162A; } .ds-sidebar-link--active { color: #00C9A7; background: #00291F; font-weight: 500; } .ds-sidebar-link:focus-visible { outline: 2px solid #00C9A7; outline-offset: 1px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Index page feature card. Border shifts to teal and lifts 2px on hover.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-icon\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\" stroke=\"#00C9A7\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></div><h2 class=\"ds-card-title\">Arquitetura</h2><p class=\"ds-card-body\">Diagramas C4, containers e isolamento multi-tenant.</p></div>",
+      "css": ".ds-card { background: #16162A; border: 1px solid #2A2A45; border-radius: 0.75rem; padding: 1.5rem; transition: border-color 200ms ease, transform 200ms ease; cursor: pointer; } .ds-card:hover { border-color: #00C9A7; transform: translateY(-2px); } .ds-card-icon { margin-bottom: 0.75rem; } .ds-card-title { font-family: Syne, sans-serif; font-size: 1rem; font-weight: 600; color: #D8D8F0; margin: 0 0 0.5rem; } .ds-card-body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 0.9rem; color: #9999BB; margin: 0; line-height: 1.6; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Status or version tag. Teal-on-teal-deep with pill radius.",
+      "html": "<span class=\"ds-badge\">v1.0</span><span class=\"ds-badge\">Beta</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; font-family: JetBrains Mono, ui-monospace, monospace; font-size: 0.7rem; font-weight: 500; padding: 0.2em 0.6em; border-radius: 9999px; background: #00291F; color: #5EECD4; border: 1px solid rgba(0, 201, 167, 0.3); line-height: 1; }"
+    },
+    {
+      "name": "Inline Code",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Inline monospace snippet within prose. Teal-high text on elevated surface.",
+      "html": "<p class=\"ds-prose\">The <code class=\"ds-inline-code\">agent_id</code> field is required.</p>",
+      "css": ".ds-prose { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 1rem; color: #D8D8F0; line-height: 1.75; } .ds-inline-code { background: #16162A; color: #5EECD4; border: 1px solid #2A2A45; border-radius: 0.3rem; padding: 0.15em 0.45em; font-family: JetBrains Mono, ui-monospace, monospace; font-size: 0.82em; }"
+    },
+    {
+      "name": "Blockquote",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Callout / note. Teal-deep background, full border — no side-stripe.",
+      "html": "<blockquote class=\"ds-blockquote\"><p>Todos os agentes HITL requerem aprovação explícita antes de executar ações irreversíveis.</p></blockquote>",
+      "css": ".ds-blockquote { background: #00291F; border: 1px solid #2A2A45; border-radius: 0.5rem; padding: 0.875rem 1.25rem; margin: 1.5rem 0; } .ds-blockquote p { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 0.9rem; color: #D8D8F0; line-height: 1.6; margin: 0; }"
+    },
+    {
+      "name": "Table",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Data table with tonal header and row hover. No zebra striping.",
+      "html": "<table class=\"ds-table\"><thead><tr><th class=\"ds-th\">Agente</th><th class=\"ds-th\">Função</th><th class=\"ds-th\">Status</th></tr></thead><tbody><tr class=\"ds-tr\"><td class=\"ds-td\">agent-crm-01</td><td class=\"ds-td\">Qualificação de leads</td><td class=\"ds-td\"><span class=\"ds-badge\">Ativo</span></td></tr><tr class=\"ds-tr\"><td class=\"ds-td\">agent-editorial-02</td><td class=\"ds-td\">Geração de conteúdo</td><td class=\"ds-td\"><span class=\"ds-badge\">Beta</span></td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; border: 1px solid #2A2A45; border-radius: 0.5rem; overflow: hidden; font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-th { padding: 0.75rem 1rem; text-align: left; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: #9999BB; background: #16162A; border-bottom: 1px solid #2A2A45; } .ds-tr { border-bottom: 1px solid #2A2A45; transition: background 100ms; } .ds-tr:last-child { border-bottom: none; } .ds-tr:hover { background: #16162A; } .ds-td { padding: 0.65rem 1rem; color: #D8D8F0; vertical-align: top; } .ds-badge { display: inline-flex; align-items: center; font-family: JetBrains Mono, ui-monospace, monospace; font-size: 0.7rem; font-weight: 500; padding: 0.2em 0.6em; border-radius: 9999px; background: #00291F; color: #5EECD4; border: 1px solid rgba(0,201,167,0.3); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Precision Engine",
+    "overview": "The 5impl.is Playbook is a technical artifact first. It documents 41 orchestrated agents, multi-tenant architecture, and operational flows for a Brazilian AI automation platform. The visual system exists to reduce cognitive load on complex content, not to add aesthetic drama on top of it. Every surface decision should answer one question: does this help an operator or B2B client navigate dense specification material with greater speed and confidence?\n\nThe palette is dark-first by necessity, not fashion. Engineers and technical stakeholders reading architecture diagrams and schema tables under varied lighting need a surface that holds over extended sessions. Midnight Navy (#0D0D14) is not chosen for drama; it's the baseline that makes Active Teal (#00C9A7) readable at low luminance and lets code syntax pop without competition.\n\nThis system explicitly rejects three aesthetics: the flat templatey output of generic dev-docs platforms, the retro hacker/terminal look, and the gray sterility of corporate enterprise documentation. The answer is deliberate restraint: a tight tonal scale, one accent color with a specific job, and typography that earns its hierarchy through weight and size, not decoration.",
+    "keyCharacteristics": [
+      "Dark-first (Midnight Navy baseline) with tonal layering, no shadows",
+      "Single accent (Active Teal), used for active states, links, and focus only",
+      "Syne display + Inter body: weight-driven hierarchy, not size-driven",
+      "Functional and direct components: no gratuitous hover effects",
+      "Bilingual (pt-BR default, English mirror) with consistent density in both"
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Active Teal (#00C9A7) is the only saturated color used in the dark theme surface at normal reading scale. No purple, no additional accent families. Its rarity is the point — when teal appears, it always means something.",
+        "section": "colors"
+      },
+      {
+        "name": "The Calmer Palette Rule",
+        "body": "Purple-signal (#7B3FE4) and its magenta sibling (#C84BE8) are flagged for removal from the hero. Replace with a solid or very low-contrast teal variant. The gradient text on the hero h1 is a banned pattern; replace with a single high-contrast solid color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight-First Rule",
+        "body": "Hierarchy is expressed through Syne weight contrast (800 → 700 → 600 → Inter 700 label), not through size steps alone. Do not introduce additional font families; the pairing is complete at 3 families.",
+        "section": "typography"
+      },
+      {
+        "name": "The Uppercase Ceiling Rule",
+        "body": "All-caps is reserved for Label (h4, sidebar group headers) and badges only — maximum 4 words. Never apply text-transform: uppercase to h1–h3 or body copy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-by-Default Rule",
+        "body": "Surfaces are flat at rest. No card has a resting shadow. Hover state on cards is expressed by border-color shift to Active Teal, not by elevation. If an element needs to feel lifted, use Surface Elevated background, not a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Active Teal (#00C9A7) exclusively for active/interactive state signals: active nav, text links, focus rings, inline code color.",
+      "Do use tonal layering for depth: Midnight Navy base → Surface Elevated (+1) → Surface Overlay (borders). Never introduce a shadow to fill this role.",
+      "Do use Syne weight contrast (800/700/600) as the primary hierarchy tool.",
+      "Do use Inter 400 at 1.75 line-height for body text. Do not tighten the line-height for denser docs pages.",
+      "Do cap content width at 50rem (--sl-content-width) for reading comfort.",
+      "Do provide text-wrap: balance on h1–h3 and text-wrap: pretty on prose paragraphs.",
+      "Do test every new surface in both pt-BR and English for heading overflow.",
+      "Do verify all text passes WCAG 2.1 AA: ≥4.5:1 for body text, ≥3:1 for large text."
+    ],
+    "donts": [
+      "Don't use gradient text (background-clip: text with a gradient background). Active on the hero h1 — must be removed.",
+      "Don't use side-stripe borders (border-left or border-right greater than 1px as a colored accent). The blockquote currently violates this.",
+      "Don't use purple or magenta on any surface outside the hero CTA, and phase that out too.",
+      "Don't make this look like a generic dev-docs template (ReadTheDocs, GitBook default).",
+      "Don't use a hacker/terminal aesthetic (green-on-black, ASCII decorations, retro monospace headers).",
+      "Don't make this look like corporate enterprise docs (Confluence, SharePoint gray).",
+      "Don't add glassmorphism effects as decoration. The header backdrop-filter is a bounded exception.",
+      "Don't add shadow to resting card or surface states.",
+      "Don't use uppercase on more than 4 consecutive words.",
+      "Don't apply accent colors (teal) to structural elements at resting state — teal means active or interactive."
+    ]
+  }
+}

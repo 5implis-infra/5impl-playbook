@@ -1,0 +1,39 @@
+---
+title: 5impl.is Playbook
+description: Complete technical specification of the 5impl.is automation system — 41 agents, multi-tenant architecture, operational flows and schemas.
+template: splash
+hero:
+  title: 5impl.is Playbook
+  tagline: Complete technical spec · 41 Agents · Paperclip + Directus + n8n + LiteLLM + Hermes
+  actions:
+    - text: Read in Portuguese
+      link: /pt/
+      icon: right-arrow
+      variant: primary
+    - text: Architecture
+      link: /pt/architecture/c1-context/
+      icon: open-book
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+<Aside type="note" title="English content coming soon">
+  This documentation is primarily available in Portuguese. The English translation is in progress.
+  
+  You can read the full specification in [Portuguese](/pt/).
+</Aside>
+
+## Quick Reference
+
+The 5impl.is system consists of **41 AI agents** organized in 7 departments, all running on Paperclip:
+
+| Department | Agents | Key flows |
+|---|---|---|
+| Executive | CEO, GovernanceAuditor | Orchestration, auditing |
+| Editorial | 15 agents | Content pipeline → publish |
+| Sales | 8 agents | Lead → contract → provisioning |
+| SaaS Church | 7 agents | Subscription lifecycle |
+| Support | 3 agents | 24/7 WhatsApp RAG + incidents |
+| Financial | 5 agents | Token quota + billing + reporting |
+
+**Tech stack:** Paperclip (agents) · Directus (CMS/data) · n8n (workflows) · LiteLLM (LLM proxy) · Hermes (email) · Astro (site)
