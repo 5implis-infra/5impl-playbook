@@ -1,49 +1,64 @@
-# Starlight Starter Kit: Basics
+# 5implis Docs — Monorepo
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Monorepo de documentação da 5implis, estruturado com **pnpm workspaces** e **Astro + Starlight**.
 
-```
-npm create astro@latest -- --template starlight
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+## Estrutura
 
 ```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+5impl-playbook/
+├── apps/
+│   ├── consulting-playbook/   — Playbook técnico (docs.5impl.is)
+│   └── consulting-b2b/        — Portal do cliente (cliente.5implis.com)
+├── packages/
+│   └── design-system/         — CSS compartilhado (@5implis/design-system)
+├── church/                    — Placeholder Church Platform
+└── pnpm-workspace.yaml
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## Comandos
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+Todos os comandos são executados a partir da raiz do repositório.
 
-Static assets, like favicons, can be placed in the `public/` directory.
+| Comando                          | Ação                                             |
+| :------------------------------- | :----------------------------------------------- |
+| `pnpm install`                   | Instala dependências de todos os workspaces      |
+| `pnpm dev:playbook`              | Dev server do playbook em `localhost:4321`       |
+| `pnpm dev:b2b`                   | Dev server do portal em `localhost:4322`         |
+| `pnpm build:playbook`            | Build de produção do playbook                    |
+| `pnpm build:b2b`                 | Build de produção do portal                      |
+| `pnpm build:all`                 | Build dos dois apps                              |
 
-## 🧞 Commands
+## Apps
 
-All commands are run from the root of the project, from a terminal:
+### `apps/consulting-playbook`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Playbook técnico interno — arquitetura, agentes, fluxos, schemas, provisionamento.
 
-## 👀 Want to learn more?
+- URL de produção: `https://docs.5impl.is`
+- Stack: Astro + Starlight + UnoCSS + Mermaid
+- Idiomas: `pt-BR` / `en`
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+### `apps/consulting-b2b`
+
+Portal do cliente — documentação voltada para clientes da consultoria.
+
+- URL de produção: `https://cliente.5implis.com`
+- Stack: Astro + Starlight + UnoCSS
+- Idioma: `pt-BR`
+
+## Packages
+
+### `packages/design-system`
+
+Source único do CSS de tema (`@5implis/design-system/styles`). Ambos os apps importam daqui — nenhum app tem CSS próprio de tema.
+
+## Deploy — Cloudflare Pages
+
+Cada app é um projeto separado no Cloudflare Pages apontando para o mesmo repositório:
+
+| Projeto CF            | Root directory             | Build command | Output dir |
+| --------------------- | -------------------------- | ------------- | ---------- |
+| `consulting-playbook` | `apps/consulting-playbook` | `pnpm build`  | `dist`     |
+| `consulting-b2b`      | `apps/consulting-b2b`      | `pnpm build`  | `dist`     |
+
+Variável de ambiente necessária em cada projeto: `PNPM_VERSION=latest`.
