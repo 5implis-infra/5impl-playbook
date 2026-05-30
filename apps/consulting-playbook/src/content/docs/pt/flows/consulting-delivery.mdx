@@ -3,13 +3,15 @@ title: Entrega de Consultoria
 description: Fluxo pós-contrato — provisionamento, kickoff, milestones, invoices e encerramento de projeto.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **Pós-assinatura → Provisionamento → Kickoff → Milestones → Invoice → Encerramento**
 
 ## Diagrama de Sequência
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fluxo completo de entrega de consultoria
+
   participant SO as SignatureOrchestrator
   participant WP as WorkspaceProvisioner
   participant S as Sócio (HITL)
@@ -50,35 +52,36 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
     Client->>GW: paga invoice
     GW-->>IO: payment_confirmed
     IO->>DIR: milestone.status = paid
-  end`} caption="Fluxo completo de entrega de consultoria" />
+  end
+```
 
 ## Checklist de Provisionamento
 
 Após aprovação HITL, o `WorkspaceProvisioner` executa em paralelo:
 
-| Item | Sistema | Resultado |
-|---|---|---|
-| Workspace Paperclip | Paperclip Admin | `workspace_id: client-{slug}` |
-| Virtual Key LLM | LiteLLM API | `vkey: vk-client-{slug}`, quota configurada |
-| Tenant n8n | n8n Admin | Tenant isolado para workflows do cliente |
-| Instância Directus | Directus Admin | `directus_url: directus.{slug}.com` |
-| Profile SMTP | Hermes | Remetente `*@{dominio-cliente}.com` |
-| Registro no CRM | Directus 5impl | `Companies.workspace_ids` atualizado |
+| Item                | Sistema         | Resultado                                   |
+| ------------------- | --------------- | ------------------------------------------- |
+| Workspace Paperclip | Paperclip Admin | `workspace_id: client-{slug}`               |
+| Virtual Key LLM     | LiteLLM API     | `vkey: vk-client-{slug}`, quota configurada |
+| Tenant n8n          | n8n Admin       | Tenant isolado para workflows do cliente    |
+| Instância Directus  | Directus Admin  | `directus_url: directus.{slug}.com`         |
+| Profile SMTP        | Hermes          | Remetente `*@{dominio-cliente}.com`         |
+| Registro no CRM     | Directus 5impl  | `Companies.workspace_ids` atualizado        |
 
 ## Estrutura de Milestones
 
 ```typescript
 interface ConsultingMilestone {
-  id: string
-  proposal_id: string
-  name: string           // "Kickoff + Discovery"
-  description: string    // Entregáveis do milestone
-  value: number          // Valor em R$
-  due_date: date
-  status: 'pending' | 'in_progress' | 'completed' | 'invoiced' | 'paid'
-  completed_at?: datetime
-  invoiced_at?: datetime
-  paid_at?: datetime
+  id: string;
+  proposal_id: string;
+  name: string; // "Kickoff + Discovery"
+  description: string; // Entregáveis do milestone
+  value: number; // Valor em R$
+  due_date: date;
+  status: "pending" | "in_progress" | "completed" | "invoiced" | "paid";
+  completed_at?: datetime;
+  invoiced_at?: datetime;
+  paid_at?: datetime;
 }
 ```
 

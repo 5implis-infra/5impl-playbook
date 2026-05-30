@@ -3,13 +3,14 @@ title: Billing & Tokens
 description: Fluxo de governança de tokens LiteLLM — quota monitoring, gatekeepers, recargas e relatório financeiro mensal.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
-
 > **Quota Monitoring → Gatekeepers → Recargas → Relatório Financeiro**
 
 ## Loop de Quota (LiteLLM)
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Loop de monitoramento de quota de tokens
+
   participant LL as LiteLLM Proxy
   participant QA as QuotaAuditor (15min)
   participant DIR as Directus 5impl
@@ -34,11 +35,15 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
       BG->>LL: desabilita Virtual Key
       BG->>Client: "Créditos esgotados. Recarregue."
     end
-  end`} caption="Loop de monitoramento de quota de tokens" />
+  end
+```
 
 ## Fluxo de Recarga de Créditos
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fluxo de recarga de créditos de IA
+
   participant Client as Cliente
   participant GW as Gateway Financeiro
   participant CAP as ContractAddendumProcessor
@@ -55,7 +60,8 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   CAP->>DIR: insere Contract_Addendum
   CAP->>GW: recalcula assinatura (base + addendums)
   GW-->>CAP: assinatura atualizada
-  CAP->>HM: email confirmação ao cliente`} caption="Fluxo de recarga de créditos de IA" />
+  CAP->>HM: email confirmação ao cliente
+```
 
 ## Configuração de Gatekeepers (Directus)
 

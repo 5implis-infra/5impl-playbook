@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@5implis/design-system": "workspace:*",
+    "@5implis/utils": "workspace:*",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/starlight": "^0.39.2",
     "astro": "^6.3.1",

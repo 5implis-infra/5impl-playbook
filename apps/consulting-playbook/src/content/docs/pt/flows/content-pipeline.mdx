@@ -3,13 +3,15 @@ title: Pipeline de Conteúdo
 description: Fluxo completo — Editorial → Aprovação → Publicação → Social → Newsletter com diagrama de sequência.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **Editorial → Aprovação → Publicação → Social → Newsletter**
 
 ## Diagrama de Sequência Completo
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Pipeline de conteúdo — do planejamento à publicação
+
   participant N8 as n8n (cron)
   participant EP as EditorialPlanner
   participant MR as MarketResearcher
@@ -62,11 +64,13 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   and Newsletter
     NE->>ND: newsletter_ready
     ND->>HM: envia em lote por vertical
-  end`} caption="Pipeline de conteúdo — do planejamento à publicação" />
+  end
+```
 
 ## Payloads de Transferência
 
 ### `editorial_schedule_triggered`
+
 ```json
 {
   "plan_entry_id": "uuid",
@@ -80,6 +84,7 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 ```
 
 ### `article_seo_ready`
+
 ```json
 {
   "plan_entry_id": "uuid",
@@ -95,6 +100,7 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 ```
 
 ### `content_published`
+
 ```json
 {
   "post_id": "uuid",
@@ -108,10 +114,10 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 ## Tratamento de Erros
 
-| Ponto de Falha | Comportamento |
-|---|---|
-| `MarketResearcher` sem resultados | Retorna `research_brief` parcial com flag `low_confidence`; `ContentWriter` usa brief disponível |
-| `ImageDirector` falha no DALL-E | Tenta modelo alternativo (Ideogram); se falhar → usa imagem placeholder do pilar |
-| Build Cloudflare falha | `StaticSitePublisher` cria issue no Paperclip + Telegram ao Sócio; post permanece `published` no Directus |
-| `EditorialGatekeeper` recebe `declined` | Notifica agente anterior com feedback; cria sub-issue de revisão |
-| Zernio API indisponível | `SocialMediaPublisher` cria issue de retry + agenda nova tentativa via n8n |
+| Ponto de Falha                          | Comportamento                                                                                             |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `MarketResearcher` sem resultados       | Retorna `research_brief` parcial com flag `low_confidence`; `ContentWriter` usa brief disponível          |
+| `ImageDirector` falha no DALL-E         | Tenta modelo alternativo (Ideogram); se falhar → usa imagem placeholder do pilar                          |
+| Build Cloudflare falha                  | `StaticSitePublisher` cria issue no Paperclip + Telegram ao Sócio; post permanece `published` no Directus |
+| `EditorialGatekeeper` recebe `declined` | Notifica agente anterior com feedback; cria sub-issue de revisão                                          |
+| Zernio API indisponível                 | `SocialMediaPublisher` cria issue de retry + agenda nova tentativa via n8n                                |

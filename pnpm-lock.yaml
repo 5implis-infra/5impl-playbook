@@ -6,13 +6,23 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      astro-mermaid:
+        specifier: ^2.0.1
+        version: 2.0.1(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(mermaid@11.15.0)
+      mermaid:
+        specifier: ^11.15.0
+        version: 11.15.0
 
   apps/consulting-b2b:
     dependencies:
       '@5implis/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@5implis/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@astrojs/mdx':
         specifier: ^5.0.6
         version: 5.0.6(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
@@ -47,6 +57,9 @@ importers:
       '@5implis/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@5implis/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@astrojs/mdx':
         specifier: ^5.0.6
         version: 5.0.6(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
@@ -91,7 +104,16 @@ importers:
         specifier: ^66.7.0
         version: 66.7.0(@unocss/astro@66.7.0(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0)))(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0))
 
-  packages/design-system: {}
+  packages/design-system:
+    devDependencies:
+      '@astrojs/starlight':
+        specifier: ^0.39.2
+        version: 0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)
+      mermaid:
+        specifier: ^11.15.0
+        version: 11.15.0
+
+  packages/utils: {}
 
 packages:
 
@@ -1165,6 +1187,16 @@ packages:
     resolution: {integrity: sha512-aiTePi2Cn0mJPYWZSzP1GcxCinX9mNtJyCCshVVPSg1yRwM7ADvFJOx0FnS440M9t65hp8JH//dc2qr22Bm4ag==}
     peerDependencies:
       astro: ^4.0.0-beta || ^5.0.0-beta || ^3.3.0 || ^6.0.0-beta
+
+  astro-mermaid@2.0.1:
+    resolution: {integrity: sha512-JTyB62FMFJpwS/1yUplmrugL0yr0flBVYZw6mf3s7pVlh+CHCeZTXyj3KCCWtFhnPLAdM+PYld0D+gxN/SysLQ==}
+    peerDependencies:
+      '@mermaid-js/layout-elk': ^0.2.0
+      astro: '>=4'
+      mermaid: ^10.0.0 || ^11.0.0
+    peerDependenciesMeta:
+      '@mermaid-js/layout-elk':
+        optional: true
 
   astro@6.3.8:
     resolution: {integrity: sha512-xH2UA8Z17IS+JaqSlSkBor7jO6gd7zXTLdmu06nKpfpDDJFbi/7KZEy3NDmWxmier+6XrCZ9Z4aitO8jhC9oiA==}
@@ -3732,6 +3764,14 @@ snapshots:
     dependencies:
       astro: 6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)
       rehype-expressive-code: 0.42.0
+
+  astro-mermaid@2.0.1(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(mermaid@11.15.0):
+    dependencies:
+      astro: 6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)
+      import-meta-resolve: 4.2.0
+      mdast-util-to-string: 4.0.0
+      mermaid: 11.15.0
+      unist-util-visit: 5.1.0
 
   astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4):
     dependencies:

@@ -3,13 +3,15 @@ title: Ciclo de Vida Church SaaS
 description: Fluxo completo — pagamento, ativação, onboarding, retenção, dunning e offboarding da Church Platform.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **Pagamento → Ativação → Onboarding → Retenção → Dunning → Offboarding**
 
 ## Diagrama de Sequência
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Ciclo de vida completo do assinante Church SaaS
+
   participant GW as Gateway Financeiro
   participant SP as SubscriptionProvisioner
   participant CL as Coolify/Docker
@@ -56,36 +58,37 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
     DM->>Leader: D+7 link atualização de cartão
     DM->>DM: D+15 suspende acesso
     DM->>SP: D+30 cancel_subscription
-  end`} caption="Ciclo de vida completo do assinante Church SaaS" />
+  end
+```
 
 ## Régua de Dunning (`Dunning_Rules`)
 
-| Dia | action | channel | template_key |
-|---|---|---|---|
-| 0 | `notify` | `whatsapp` + `email` | `dunning_d0` |
-| 3 | `retry` + `notify` | `whatsapp` | `dunning_d3` |
-| 7 | `notify` | `whatsapp` + `email` | `dunning_d7_critical` |
-| 15 | `soft_suspend` | `email` | `dunning_d15_suspend` |
-| 30 | `cancel` | `email` | `dunning_d30_cancel` |
+| Dia | action             | channel              | template_key          |
+| --- | ------------------ | -------------------- | --------------------- |
+| 0   | `notify`           | `whatsapp` + `email` | `dunning_d0`          |
+| 3   | `retry` + `notify` | `whatsapp`           | `dunning_d3`          |
+| 7   | `notify`           | `whatsapp` + `email` | `dunning_d7_critical` |
+| 15  | `soft_suspend`     | `email`              | `dunning_d15_suspend` |
+| 30  | `cancel`           | `email`              | `dunning_d30_cancel`  |
 
 > Todas as regras são configuráveis via Directus — sem deploy para ajustar a cadência.
 
 ## Módulos da Church Platform
 
-| Módulo | flag Directus | Plano mínimo |
-|---|---|---|
-| Membership | `module_membership` | starter |
-| Finances | `module_finances` | starter |
-| Pastoral Care | `module_pastoral` | starter |
-| Events | `module_events` | starter |
-| Campaigns | `module_campaigns` | pro |
-| Donations | `module_donations` | pro |
-| Courses | `module_courses` | pro |
-| Sermons | `module_sermons` | pro |
-| Assets | `module_assets` | pro |
-| Schedules | `module_schedules` | pro |
-| Multi-Church | `module_multi_church` | enterprise |
-| Contributor App | `module_contributor_app` | addon |
-| Leader App | `module_leader_app` | addon |
-| Project Management | `module_project_mgmt` | addon |
-| Forms | `module_forms` | addon |
+| Módulo             | flag Directus            | Plano mínimo |
+| ------------------ | ------------------------ | ------------ |
+| Membership         | `module_membership`      | starter      |
+| Finances           | `module_finances`        | starter      |
+| Pastoral Care      | `module_pastoral`        | starter      |
+| Events             | `module_events`          | starter      |
+| Campaigns          | `module_campaigns`       | pro          |
+| Donations          | `module_donations`       | pro          |
+| Courses            | `module_courses`         | pro          |
+| Sermons            | `module_sermons`         | pro          |
+| Assets             | `module_assets`          | pro          |
+| Schedules          | `module_schedules`       | pro          |
+| Multi-Church       | `module_multi_church`    | enterprise   |
+| Contributor App    | `module_contributor_app` | addon        |
+| Leader App         | `module_leader_app`      | addon        |
+| Project Management | `module_project_mgmt`    | addon        |
+| Forms              | `module_forms`           | addon        |

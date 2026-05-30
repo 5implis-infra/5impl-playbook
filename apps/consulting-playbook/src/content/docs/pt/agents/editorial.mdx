@@ -3,13 +3,16 @@ title: Editorial & Marketing
 description: 15 agentes do pipeline de conteúdo — planejamento, escrita, SEO, publicação, redes sociais e newsletter.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **15 agentes especializados · 3 times: Produção de Conteúdo, Time Social e Análise**
 
 ## Diagrama do Time Editorial
 
-<MermaidDiagram code={`graph TD
+Diagrama do time editorial completo
+
+```mermaid
+graph TD
+
   subgraph Planejamento
     EP[EditorialPlanner]
   end
@@ -50,13 +53,14 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   IC -->|instagram_post_ready| EG
   NE -->|newsletter_ready| ND
   EG -->|social_approved| SMP
-  CA -.->|atualiza scores| EP`} caption="Diagrama do time editorial completo" />
+  CA -.->|atualiza scores| EP
+```
 
 ## EditorialPlanner (`editorial_planner`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Cron dia 1 de cada mês às 07:00 |
+| Campo          | Valor                                                 |
+| -------------- | ----------------------------------------------------- |
+| **Trigger**    | Cron dia 1 de cada mês às 07:00                       |
 | **Tools/MCPs** | `web_search`, `directus_mcp`, `paperclip_issues_tool` |
 
 Planeja o calendário editorial mensal com base nas configurações de pilares, performance histórica e tendências de mercado. Gera 4–6 sugestões de pauta por pilar com `title`, `target_keywords`, `content_brief` e cria issues HITL para aprovação do Sócio.
@@ -67,10 +71,10 @@ Planeja o calendário editorial mensal com base nas configurações de pilares, 
 
 ## MarketResearcher (`market_researcher`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `editorial_schedule_triggered` (disparado por n8n ao processar Editorial_Plan) |
-| **Tools/MCPs** | `web_search` |
+| Campo          | Valor                                                                          |
+| -------------- | ------------------------------------------------------------------------------ |
+| **Trigger**    | `editorial_schedule_triggered` (disparado por n8n ao processar Editorial_Plan) |
+| **Tools/MCPs** | `web_search`                                                                   |
 
 Realiza pesquisa profunda e estruturada sobre o tópico da pauta. Executa múltiplas buscas: panorama do tema, dados/estatísticas recentes, perspectivas de especialistas, exemplos práticos. Retorna `research_brief` estruturado com seções temáticas, fontes e dados quantitativos.
 
@@ -78,10 +82,10 @@ Realiza pesquisa profunda e estruturada sobre o tópico da pauta. Executa múlti
 
 ## ContentWriter (`content_writer`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `research_completed` |
-| **Tools/MCPs** | nenhum (puro LLM) |
+| Campo          | Valor                |
+| -------------- | -------------------- |
+| **Trigger**    | `research_completed` |
+| **Tools/MCPs** | nenhum (puro LLM)    |
 
 Escreve o artigo completo em Markdown a partir do `research_brief` e das diretrizes editoriais. Aplica tom direto e confiante (PT), professional e concise (EN). Inclui sugestões de links internos marcados como `[[INTERNAL_LINK: tópico]]`.
 
@@ -89,10 +93,10 @@ Escreve o artigo completo em Markdown a partir do `research_brief` e das diretri
 
 ## SEOSpecialist (`seo_specialist`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `article_written` |
-| **Tools/MCPs** | `directus_mcp` |
+| Campo          | Valor             |
+| -------------- | ----------------- |
+| **Trigger**    | `article_written` |
+| **Tools/MCPs** | `directus_mcp`    |
 
 Otimiza todos os metadados SEO. Gera `meta_title` (≤60 chars), `meta_description` (≤155 chars), `slug` (URL-friendly), resolve `[[INTERNAL_LINK]]` via busca no Directus e calcula `estimated_read_time`.
 
@@ -100,10 +104,10 @@ Otimiza todos os metadados SEO. Gera `meta_title` (≤60 chars), `meta_descripti
 
 ## DraftPublisher (`draft_publisher`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `article_seo_ready` |
-| **Tools/MCPs** | `directus_mcp` |
+| Campo          | Valor               |
+| -------------- | ------------------- |
+| **Trigger**    | `article_seo_ready` |
+| **Tools/MCPs** | `directus_mcp`      |
 
 Mapeia o payload `article_seo_ready` ao schema `Posts` do Directus inteligentemente. Salva o rascunho como `status = 'draft'`.
 
@@ -111,12 +115,13 @@ Mapeia o payload `article_seo_ready` ao schema `Posts` do Directus inteligenteme
 
 ## ImageDirector (`image_director`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `draft_created` / `social_assets_needed` |
+| Campo          | Valor                                                                  |
+| -------------- | ---------------------------------------------------------------------- |
+| **Trigger**    | `draft_created` / `social_assets_needed`                               |
 | **Tools/MCPs** | `directus_mcp`, `litellm_api_tool` (DALL-E), `http_tool` (n8n → Canva) |
 
 Decide a estratégia de imagem com base em `Content_Channels.asset_strategy`:
+
 - `ai_generated` → crafts prompt e chama LiteLLM → DALL-E/Ideogram
 - `canva_template` → dispara n8n → Canva API com variáveis
 
@@ -124,10 +129,10 @@ Decide a estratégia de imagem com base em `Content_Channels.asset_strategy`:
 
 ## EditorialGatekeeper (`editorial_gatekeeper`) 🔒 HITL
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `draft_created` + assets_ready / `linkedin_post_ready` / `instagram_post_ready` |
-| **Tools/MCPs** | `paperclip_issues_tool`, `zernio_tool` (WhatsApp), `directus_mcp` |
+| Campo          | Valor                                                                           |
+| -------------- | ------------------------------------------------------------------------------- |
+| **Trigger**    | `draft_created` + assets_ready / `linkedin_post_ready` / `instagram_post_ready` |
+| **Tools/MCPs** | `paperclip_issues_tool`, `zernio_tool` (WhatsApp), `directus_mcp`               |
 
 Único ponto de aprovação humana antes de qualquer publicação. Cria issue HITL + notifica Sócio via WhatsApp. Distribui para o próximo agente após `approved` ou retorna com `declined` + feedback.
 
@@ -135,9 +140,9 @@ Decide a estratégia de imagem com base em `Content_Channels.asset_strategy`:
 
 ## StaticSitePublisher (`static_site_publisher`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `content_approved` |
+| Campo          | Valor                                                  |
+| -------------- | ------------------------------------------------------ |
+| **Trigger**    | `content_approved`                                     |
 | **Tools/MCPs** | `directus_mcp`, `http_tool` (Cloudflare build webhook) |
 
 Atualiza `Posts.status = published` no Directus, dispara o build webhook do Cloudflare Pages e confirma o deploy.
@@ -146,10 +151,10 @@ Atualiza `Posts.status = published` no Directus, dispara o build webhook do Clou
 
 ## SocialMediaStrategist (`social_media_strategist`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `content_published` / issue `social_campaign` |
-| **Tools/MCPs** | `directus_mcp`, `paperclip_agent_manager` |
+| Campo          | Valor                                         |
+| -------------- | --------------------------------------------- |
+| **Trigger**    | `content_published` / issue `social_campaign` |
+| **Tools/MCPs** | `directus_mcp`, `paperclip_agent_manager`     |
 
 Analisa o conteúdo publicado e distribui briefs para `LinkedInCopywriter` e `InstagramCopywriter`.
 
@@ -157,19 +162,19 @@ Analisa o conteúdo publicado e distribui briefs para `LinkedInCopywriter` e `In
 
 ## LinkedInCopywriter / InstagramCopywriter
 
-| Campo | LinkedIn | Instagram |
-|---|---|---|
-| **Trigger** | Delegado pelo strategist | Delegado pelo strategist |
-| **Output** | Post profissional, análise de indústria, CTA | Caption visual, hashtags estratégicos |
+| Campo       | LinkedIn                                     | Instagram                             |
+| ----------- | -------------------------------------------- | ------------------------------------- |
+| **Trigger** | Delegado pelo strategist                     | Delegado pelo strategist              |
+| **Output**  | Post profissional, análise de indústria, CTA | Caption visual, hashtags estratégicos |
 
 ---
 
 ## NewsletterEditor (`newsletter_editor`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `content_published` |
-| **Tools/MCPs** | `directus_mcp` |
+| Campo          | Valor               |
+| -------------- | ------------------- |
+| **Trigger**    | `content_published` |
+| **Tools/MCPs** | `directus_mcp`      |
 
 Cria o email da newsletter a partir do post publicado. Gera `subject`, `preheader`, `excerpt` e `cta` segmentados por vertical.
 
@@ -177,9 +182,9 @@ Cria o email da newsletter a partir do post publicado. Gera `subject`, `preheade
 
 ## NewsletterDispatcher (`newsletter_dispatcher`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `newsletter_ready` |
+| Campo          | Valor                         |
+| -------------- | ----------------------------- |
+| **Trigger**    | `newsletter_ready`            |
 | **Tools/MCPs** | `hermes_tool`, `directus_mcp` |
 
 Segmenta a lista de leads por vertical e dispara o envio em lote via Hermes.
@@ -188,9 +193,9 @@ Segmenta a lista de leads por vertical e dispara o envio em lote via Hermes.
 
 ## SocialMediaPublisher (`social_media_publisher`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `social_approved` |
+| Campo          | Valor                         |
+| -------------- | ----------------------------- |
+| **Trigger**    | `social_approved`             |
 | **Tools/MCPs** | `zernio_tool`, `directus_mcp` |
 
 Publica os posts nas plataformas conectadas via Zernio no horário configurado em `Content_Channels.posting_time`.
@@ -199,9 +204,9 @@ Publica os posts nas plataformas conectadas via Zernio no horário configurado e
 
 ## ContentAnalyst (`content_analyst`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Cron toda Segunda às 08:00 |
+| Campo          | Valor                                               |
+| -------------- | --------------------------------------------------- |
+| **Trigger**    | Cron toda Segunda às 08:00                          |
 | **Tools/MCPs** | `directus_mcp`, `http_tool` (Google Search Console) |
 
 Coleta métricas semanais de performance (pageviews, tempo na página, taxa de conversão, posição SEO) e atualiza `Content_Performance`. Scores retroalimentam o `EditorialPlanner` para priorizar tópicos de alta tração.

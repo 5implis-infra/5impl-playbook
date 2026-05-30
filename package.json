@@ -7,6 +7,14 @@
     "dev:b2b": "pnpm --filter consulting-b2b dev",
     "build:playbook": "pnpm --filter consulting-playbook build",
     "build:b2b": "pnpm --filter consulting-b2b build",
-    "build:all": "pnpm --filter './apps/*' build"
+    "build": "pnpm --filter './apps/*' build"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "astro-mermaid": "^2.0.1",
+    "mermaid": "^11.15.0"
   }
 }

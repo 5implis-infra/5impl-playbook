@@ -4,8 +4,15 @@
   "private": true,
   "exports": {
     "./styles": "./src/styles/custom.css",
-    "./components/Header": "./src/components/Header.astro",
-    "./components/ThemeToggle": "./src/components/ThemeToggle.astro",
-    "./components/LangToggle": "./src/components/LangToggle.astro"
+    "./components/*": "./src/components/*",
+    "./assets/*": "./src/assets/*"
+  },
+  "peerDependencies": {
+    "@astrojs/starlight": "^0.39.2",
+    "mermaid": "^11.15.0"
+  },
+  "devDependencies": {
+    "@astrojs/starlight": "^0.39.2",
+    "mermaid": "^11.15.0"
   }
 }

@@ -3,10 +3,12 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["@5implis/design-system/components/*"],
+      "@assets/*": ["@5implis/design-system/assets/*"]
     }
   }
 }

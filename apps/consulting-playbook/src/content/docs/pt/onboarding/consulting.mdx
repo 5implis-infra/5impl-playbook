@@ -3,7 +3,6 @@ title: "Onboarding — Consultoria"
 description: "Sequência de onboarding pós-assinatura de contrato de consultoria."
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 # Onboarding — Consultoria (Pós-Contrato)
 
@@ -15,7 +14,10 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 Imediatamente após `proposal_signed`, o `SignatureOrchestrator` envia confirmação e o `WorkspaceProvisioner` inicia o processo.
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fase 1 — fluxo pós-assinatura de contrato até aprovação de provisionamento
+
   participant CS as Clicksign
   participant SO as SignatureOrchestrator
   participant WP as WorkspaceProvisioner
@@ -29,9 +31,11 @@ Imediatamente após `proposal_signed`, o `SignatureOrchestrator` envia confirma�
 
   WP->>S: Issue HITL: "Provisionar workspace {company_name}"
   Note right of S: Sócio preenche SMTP e revisa configurações
-  S->>WP: provisioning_approved`} caption="Fase 1 — fluxo pós-assinatura de contrato até aprovação de provisionamento" />
+  S->>WP: provisioning_approved
+```
 
 ### Email de Confirmação de Assinatura
+
 **Subject:** Contrato assinado — bem-vindo(a) à 5impl! 🎉
 
 ```
@@ -56,33 +60,38 @@ Dúvidas? Responda este email ou nos chame no WhatsApp.
 
 ## Fase 2: Pós-Provisionamento (após workspace_provisioned)
 
-<MermaidDiagram code={`sequenceDiagram
-  participant WP as WorkspaceProvisioner
+```mermaid
+sequenceDiagram
+  title Fase 2 — fluxo pós-provisionamento: kickoff, desenvolvimento e faturamento por milestone
+
+    participant WP as WorkspaceProvisioner
   participant Client as Cliente
   participant S as Sócio
   participant PB as Paperclip (workspace cliente)
 
-  WP->>Client: email boas-vindas + credenciais (Hermes)
-  WP->>PB: cria issue de kickoff no workspace do cliente
+WP->>Client: email boas-vindas + credenciais (Hermes)
+WP->>PB: cria issue de kickoff no workspace do cliente
 
-  Note over S,PB: Sócio agenda call de kickoff com cliente
+Note over S,PB: Sócio agenda call de kickoff com cliente
 
-  S->>Client: call de kickoff (discovery técnico)
-  Note right of S: Entender sistemas atuais, acessos, integrações necessárias
+S->>Client: call de kickoff (discovery técnico)
+Note right of S: Entender sistemas atuais, acessos, integrações necessárias
 
-  S->>PB: cria issues de descoberta técnica
-  loop Desenvolvimento do projeto
-    S->>PB: cria issues por feature/integração
-    PB->>PB: executa agentes do produto do cliente
-    S->>Client: demos e validações
-  end
+S->>PB: cria issues de descoberta técnica
+loop Desenvolvimento do projeto
+S->>PB: cria issues por feature/integração
+PB->>PB: executa agentes do produto do cliente
+S->>Client: demos e validações
+end
 
-  Note over PB: Milestone concluído
-  S->>PB: fecha issue milestone_completed
-  PB->>IO: InvoiceOrchestrator acionado
-  IO->>Client: envia invoice do milestone (Hermes)`} caption="Fase 2 — fluxo pós-provisionamento: kickoff, desenvolvimento e faturamento por milestone" />
+Note over PB: Milestone concluído
+S->>PB: fecha issue milestone_completed
+PB->>IO: InvoiceOrchestrator acionado
+IO->>Client: envia invoice do milestone (Hermes)
+```
 
 ### Email de Boas-vindas (Pós-Provisionamento)
+
 **Subject:** Seu ambiente está pronto — vamos começar!
 
 ```
@@ -123,11 +132,13 @@ Issue criada automaticamente no workspace do cliente pelo `WorkspaceProvisioner`
 ## Kickoff — {company_name}
 
 ### Pré-call (antes da reunião de kickoff)
+
 - [ ] Cliente acessou o Paperclip
 - [ ] Cliente acessou o n8n
 - [ ] Apresentar o fluxo de trabalho (issues → milestones → invoice)
 
 ### Durante a call de kickoff
+
 - [ ] Revisar scope do contrato ponto a ponto
 - [ ] Mapear sistemas existentes (CRMs, ERPs, planilhas, e-mails)
 - [ ] Solicitar credenciais de acesso necessárias
@@ -135,11 +146,13 @@ Issue criada automaticamente no workspace do cliente pelo `WorkspaceProvisioner`
 - [ ] Alinhar expectativas de prazo por milestone
 
 ### Pós-call
+
 - [ ] Criar issues de descoberta técnica por sistema
 - [ ] Configurar Hermes profile com SMTP do cliente
 - [ ] Integrar primeiras ferramentas do cliente
 
 ### Milestones do Projeto
+
 {milestones_list}
 ```
 
@@ -147,12 +160,12 @@ Issue criada automaticamente no workspace do cliente pelo `WorkspaceProvisioner`
 
 ## Comunicação Contínua Durante o Projeto
 
-| Canal | Tipo de Comunicação |
-|---|---|
-| **Paperclip (workspace cliente)** | Issues de features, bugs, milestones, decisões técnicas |
-| **WhatsApp (Hermes profile do cliente)** | Comunicações informais, lembretes, demos rápidas |
-| **Email (@5impl.is)** | Invoices, contratos, comunicações formais |
-| **Telegram** | Alertas do Sócio quando milestone está concluído |
+| Canal                                    | Tipo de Comunicação                                     |
+| ---------------------------------------- | ------------------------------------------------------- |
+| **Paperclip (workspace cliente)**        | Issues de features, bugs, milestones, decisões técnicas |
+| **WhatsApp (Hermes profile do cliente)** | Comunicações informais, lembretes, demos rápidas        |
+| **Email (@5impl.is)**                    | Invoices, contratos, comunicações formais               |
+| **Telegram**                             | Alertas do Sócio quando milestone está concluído        |
 
 ---
 

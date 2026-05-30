@@ -16,43 +16,45 @@ hero:
 ---
 
 import { CardGrid, Card } from "@astrojs/starlight/components";
-import MermaidDiagram from "@components/shared/MermaidDiagram.astro";
 
 ## Diagrama de Contexto (C4 — Nível 1)
 
-<MermaidDiagram code={`C4Context
-  title 5impl.is — Contexto do Sistema
+```mermaid
+C4Context
+  title C4 Nível 1 — Contexto completo do sistema 5impl.is
 
-Person(socio, "Sócio / Fundador", "Aprova conteúdo, contratos e provisioning via HITL")
-Person(cliente_b2b, "Cliente B2B", "Contrata consultoria de automação")
-Person(lider_igreja, "Líder de Igreja", "Assina e usa a Church Platform SaaS")
-Person(lead, "Lead", "Capturado pelo funil via site, WhatsApp ou redes sociais")
+  
+  Person(socio, "Sócio / Fundador", "Aprova conteúdo, contratos e provisioning via HITL")
+  Person(cliente_b2b, "Cliente B2B", "Contrata consultoria de automação")
+  Person(lider_igreja, "Líder de Igreja", "Assina e usa a Church Platform SaaS")
+  Person(lead, "Lead", "Capturado pelo funil via site, WhatsApp ou redes sociais")
 
-System(fiveimpl, "5impl.is", "41 agentes orquestrados no Paperclip — CRM, Editorial, Vendas, SaaS, Suporte e Financeiro")
+  System(fiveimpl, "5impl.is", "41 agentes orquestrados no Paperclip — CRM, Editorial, Vendas, SaaS, Suporte e Financeiro")
 
-System_Ext(whatsapp, "WhatsApp Business", "Qualificação de leads, suporte e notificações")
-System_Ext(zernio, "Zernio", "Captura de leads e publicação em redes sociais")
-System_Ext(gateway, "Gateway Financeiro", "Assinaturas recorrentes e pagamentos avulsos")
-System_Ext(clicksign, "Clicksign / ZapSign", "Assinatura digital de contratos")
-System_Ext(cloudflare, "Cloudflare Pages", "Deploy do site estático Astro")
-System_Ext(coolify, "Coolify / Docker", "Provisionamento de instâncias Church Platform")
-System_Ext(llm_providers, "Anthropic / OpenAI", "Modelos LLM roteados pelo proxy LiteLLM")
-System_Ext(canva, "Canva API", "Assets visuais via templates")
-System_Ext(telegram, "Telegram", "Alertas P1 e relatórios para os sócios")
+  System_Ext(whatsapp, "WhatsApp Business", "Qualificação de leads, suporte e notificações")
+  System_Ext(zernio, "Zernio", "Captura de leads e publicação em redes sociais")
+  System_Ext(gateway, "Gateway Financeiro", "Assinaturas recorrentes e pagamentos avulsos")
+  System_Ext(clicksign, "Clicksign / ZapSign", "Assinatura digital de contratos")
+  System_Ext(cloudflare, "Cloudflare Pages", "Deploy do site estático Astro")
+  System_Ext(coolify, "Coolify / Docker", "Provisionamento de instâncias Church Platform")
+  System_Ext(llm_providers, "Anthropic / OpenAI", "Modelos LLM roteados pelo proxy LiteLLM")
+  System_Ext(canva, "Canva API", "Assets visuais via templates")
+  System_Ext(telegram, "Telegram", "Alertas P1 e relatórios para os sócios")
 
-Rel(socio, fiveimpl, "HITL: aprovações e decisões críticas")
-Rel(lead, fiveimpl, "Site, WhatsApp, Zernio")
-Rel(cliente_b2b, fiveimpl, "Contrato, workspace, entregáveis")
-Rel(lider_igreja, fiveimpl, "Assinatura, plataforma, suporte")
-Rel(fiveimpl, whatsapp, "Mensagens via Zernio adapter")
-Rel(fiveimpl, zernio, "Posts e webhooks de leads")
-Rel(fiveimpl, gateway, "Pagamentos e assinaturas")
-Rel(fiveimpl, clicksign, "Upload e assinatura de PDFs")
-Rel(fiveimpl, cloudflare, "Build webhook pós-publicação")
-Rel(fiveimpl, coolify, "Provisioning de instâncias")
-Rel(fiveimpl, llm_providers, "Chamadas LLM via LiteLLM")
-Rel(fiveimpl, canva, "Templates de imagem via n8n")
-Rel(fiveimpl, telegram, "Alertas e relatórios executivos")`} caption="C4 Nível 1 — Contexto completo do sistema 5impl.is" />
+  Rel(socio, fiveimpl, "HITL: aprovações e decisões críticas")
+  Rel(lead, fiveimpl, "Site, WhatsApp, Zernio")
+  Rel(cliente_b2b, fiveimpl, "Contrato, workspace, entregáveis")
+  Rel(lider_igreja, fiveimpl, "Assinatura, plataforma, suporte")
+  Rel(fiveimpl, whatsapp, "Mensagens via Zernio adapter")
+  Rel(fiveimpl, zernio, "Posts e webhooks de leads")
+  Rel(fiveimpl, gateway, "Pagamentos e assinaturas")
+  Rel(fiveimpl, clicksign, "Upload e assinatura de PDFs")
+  Rel(fiveimpl, cloudflare, "Build webhook pós-publicação")
+  Rel(fiveimpl, coolify, "Provisioning de instâncias")
+  Rel(fiveimpl, llm_providers, "Chamadas LLM via LiteLLM")
+  Rel(fiveimpl, canva, "Templates de imagem via n8n")
+  Rel(fiveimpl, telegram, "Alertas e relatórios executivos")
+```
 
 ## Índice de Seções
 

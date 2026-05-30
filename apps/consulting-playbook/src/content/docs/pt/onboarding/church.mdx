@@ -3,7 +3,6 @@ title: "Onboarding — Church Platform"
 description: "Sequência completa de onboarding pós-ativação de assinatura Church SaaS."
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 # Onboarding — Church Platform SaaS
 
@@ -13,7 +12,10 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 ## Fluxo Detalhado
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Sequência de onboarding Church Platform — Dia 0 ao Dia 10
+
   participant SP as SubscriptionProvisioner
   participant OO as OnboardingOrchestrator
   participant Leader as Líder da Igreja
@@ -44,7 +46,8 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   OO->>DIR: onboarding_status = 'day10'
 
   Note over OO: Após call de sucesso
-  OO->>DIR: onboarding_status = 'completed'`} caption="Sequência de onboarding Church Platform — Dia 0 ao Dia 10" />
+  OO->>DIR: onboarding_status = 'completed'
+```
 
 ---
 
@@ -53,6 +56,7 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 Configurados em `Onboarding_Steps` no Directus — editáveis sem código.
 
 ### Dia 0 — WhatsApp (imediato)
+
 ```
 Olá, {leader_name}! 👋
 
@@ -71,6 +75,7 @@ Dúvidas? Estamos aqui! Responda esta mensagem a qualquer hora.
 ```
 
 ### Dia 2 — WhatsApp
+
 ```
 Oi, {leader_name}! Como está indo?
 
@@ -82,7 +87,9 @@ Qualquer dúvida, é só chamar! 🙌
 ```
 
 ### Dia 5 — Email
+
 **Subject:** Configurando o financeiro da \{church_name\}
+
 ```
 Olá, {leader_name}!
 
@@ -99,6 +106,7 @@ Qualquer dúvida, responda este email.
 ```
 
 ### Dia 7 — WhatsApp
+
 ```
 Oi, {leader_name}! Já faz uma semana desde que você ativou a Church Platform.
 
@@ -108,7 +116,9 @@ Responda aqui e te ajudamos em minutos! 💬
 ```
 
 ### Dia 10 — Email
+
 **Subject:** Vamos fazer uma call rápida? ☕
+
 ```
 Olá, {leader_name}!
 
@@ -173,13 +183,13 @@ Se preferir, pode responder este email com suas dúvidas.
 
 ## Variáveis Disponíveis nos Templates
 
-| Variável | Fonte |
-|---|---|
-| `{leader_name}` | `Church_Clients.leader_name` |
-| `{church_name}` | `Church_Clients.church_name` |
-| `{leader_email}` | `Church_Clients.leader_email` |
-| `{platform_url}` | `Church_Clients.directus_instance_url` |
-| `{temp_password}` | Gerado no provisionamento, armazenado temporariamente |
-| `{tutorial_members_url}` | `Company_Settings.tutorial_members_url` |
-| `{tutorial_financial_url}` | `Company_Settings.tutorial_financial_url` |
-| `{calendly_url}` | `Company_Settings.success_call_calendly_url` |
+| Variável                   | Fonte                                                 |
+| -------------------------- | ----------------------------------------------------- |
+| `{leader_name}`            | `Church_Clients.leader_name`                          |
+| `{church_name}`            | `Church_Clients.church_name`                          |
+| `{leader_email}`           | `Church_Clients.leader_email`                         |
+| `{platform_url}`           | `Church_Clients.directus_instance_url`                |
+| `{temp_password}`          | Gerado no provisionamento, armazenado temporariamente |
+| `{tutorial_members_url}`   | `Company_Settings.tutorial_members_url`               |
+| `{tutorial_financial_url}` | `Company_Settings.tutorial_financial_url`             |
+| `{calendly_url}`           | `Company_Settings.success_call_calendly_url`          |

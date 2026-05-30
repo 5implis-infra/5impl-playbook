@@ -3,8 +3,6 @@ title: "Integrações Externas"
 description: "Spec de todas as APIs externas, autenticação, webhooks e padrões de integração."
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
-
 # Integrações Externas
 
 > Spec de todas as APIs externas, padrões de autenticação e contratos de webhook
@@ -13,9 +11,10 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 ## Diagrama de Integrações (C4 — Nível 3)
 
-<MermaidDiagram code={`C4Component
-  title 5impl.is — Integrações Externas
-
+```mermaid
+C4Component
+  title Diagrama C4 Nível 3 — integrações externas dos agentes e workflows
+  
   Container_Boundary(paperclip, "Paperclip Agents") {
     Component(agents, "Agentes", "Tools/MCP", "41 agentes com acesso seletivo às integrações")
   }
@@ -33,6 +32,7 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   System_Ext(gsearch, "Search Console API", "SEO Metrics")
   System_Ext(telegram, "Telegram Bot API", "Alertas")
   System_Ext(puppeteer, "Puppeteer HTTP Service", "PDF Rendering")
+  System_Ext(n8n_c, "N8n REST API", "Orquestração")
 
   Rel(agents, zernio, "WhatsApp send/receive, social publish")
   Rel(agents, gateway, "create/cancel subscriptions, get payment status")
@@ -47,7 +47,8 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   Rel(n8n_c, zernio, "bulk message send")
   Rel(zernio, agents, "webhooks: leads, WhatsApp messages")
   Rel(gateway, agents, "webhooks: payment_confirmed, payment_failed")
-  Rel(clicksign, agents, "webhook: signature_completed")`} caption="Diagrama C4 Nível 3 — integrações externas dos agentes e workflows" />
+  Rel(clicksign, agents, "webhook: signature_completed")
+```
 
 ---
 

@@ -250,7 +250,7 @@ Nenhuma outra alteração no config é necessária. Os paths de logo (`./src/ass
 
 ## Fase 6 — Atualizar imports de componentes no consulting-playbook
 
-O `MermaidDiagram.astro` está em `src/components/shared/MermaidDiagram.astro`. Os imports nos MDX usam `@components/shared/MermaidDiagram.astro` via alias TypeScript.
+O `MermaidDiagram.astro` está em `src/components/shared/MermaidDiagram.astro`. Os imports nos MDX usam `@components/MermaidDiagram.astro` via alias TypeScript.
 
 Verificar se o alias `@components` está configurado no `tsconfig.json` do app:
 

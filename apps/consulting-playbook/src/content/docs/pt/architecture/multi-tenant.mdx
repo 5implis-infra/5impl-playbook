@@ -3,7 +3,6 @@ title: Arquitetura Multi-Tenant
 description: Isolamento de workspaces, fronteiras de dados e responsabilidades por tenant no sistema 5impl.is.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **Isolamento de workspaces, fronteiras de dados e responsabilidades por tenant**
 
@@ -43,53 +42,56 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 ### Paperclip
 
-| Workspace | O que roda | Criado por |
-|---|---|---|
-| `5impl` | Todos os 41 agentes operacionais da 5impl | Manual (setup inicial) |
-| `client-{slug}` | Agentes e automações do produto entregue ao cliente | `WorkspaceProvisioner` (pós-contrato) |
-| `church-{slug}` | Agentes de suporte e automações da Church Platform | `SubscriptionProvisioner` (pós-pagamento) |
+| Workspace       | O que roda                                          | Criado por                                |
+| --------------- | --------------------------------------------------- | ----------------------------------------- |
+| `5impl`         | Todos os 41 agentes operacionais da 5impl           | Manual (setup inicial)                    |
+| `client-{slug}` | Agentes e automações do produto entregue ao cliente | `WorkspaceProvisioner` (pós-contrato)     |
+| `church-{slug}` | Agentes de suporte e automações da Church Platform  | `SubscriptionProvisioner` (pós-pagamento) |
 
 > **Regra:** Issues de contrato, cobrança e CRM de TODOS os clientes ficam sempre no workspace `5impl`. O workspace do cliente é exclusivo para os entregáveis dele.
 
 ### Directus
 
-| Instância | Dados armazenados | Multi-tenant |
-|---|---|---|
-| `directus.5impl.is` | CRM, Editorial_Plan, Proposals, Church_Subscriptions, Gatekeepers, Token_Usage | Único — todos os dados operacionais da 5impl |
-| `directus.client-a.com` | Dados do produto do cliente A | Uma instância por cliente de consultoria |
-| `directus.church-b.app` | Dados da Church Platform da Igreja B | Uma instância por assinante Church SaaS |
+| Instância               | Dados armazenados                                                              | Multi-tenant                                 |
+| ----------------------- | ------------------------------------------------------------------------------ | -------------------------------------------- |
+| `directus.5impl.is`     | CRM, Editorial_Plan, Proposals, Church_Subscriptions, Gatekeepers, Token_Usage | Único — todos os dados operacionais da 5impl |
+| `directus.client-a.com` | Dados do produto do cliente A                                                  | Uma instância por cliente de consultoria     |
+| `directus.church-b.app` | Dados da Church Platform da Igreja B                                           | Uma instância por assinante Church SaaS      |
 
 > **Importante:** `Church_Subscriptions` e `Church_Clients` vivem no Directus 5impl, não na instância da igreja. Isso protege os dados de billing e permite que a Church Platform API consulte feature flags sem acessar o CRM interno.
 
 ### LiteLLM
 
-| Virtual Key | Workspace | Limite | Quem monitora |
-|---|---|---|---|
-| `5impl-internal` | 5impl (agentes operacionais) | Definido em Company_Settings | `QuotaAuditor` (bucket interno) |
-| `client-{slug}` | Workspace do cliente | Definido no contrato (Proposals) | `QuotaAuditor` + `BillingGatekeeper` |
-| `church-{slug}` | Workspace da Igreja | Definido no plano (Church_Subscriptions) | `QuotaAuditor` + `BillingGatekeeper` |
+| Virtual Key      | Workspace                    | Limite                                   | Quem monitora                        |
+| ---------------- | ---------------------------- | ---------------------------------------- | ------------------------------------ |
+| `5impl-internal` | 5impl (agentes operacionais) | Definido em Company_Settings             | `QuotaAuditor` (bucket interno)      |
+| `client-{slug}`  | Workspace do cliente         | Definido no contrato (Proposals)         | `QuotaAuditor` + `BillingGatekeeper` |
+| `church-{slug}`  | Workspace da Igreja          | Definido no plano (Church_Subscriptions) | `QuotaAuditor` + `BillingGatekeeper` |
 
 **Tag obrigatória:** Cada agente injeta `X-LiteLLM-Tag: {department}.{agent_id}` em toda chamada (ex: `editorial.content_writer`).
 
 ### n8n
 
-| Tenant | Workflows | Criado por |
-|---|---|---|
-| `5impl` | Webhook routing, Canva API, Church activity sync, bulk ops internas | Manual |
-| `client-{slug}` | Automações entregues ao cliente (produto da consultoria) | `WorkspaceProvisioner` |
-| `church-{slug}` | Automações operacionais da Igreja | `SubscriptionProvisioner` |
+| Tenant          | Workflows                                                           | Criado por                |
+| --------------- | ------------------------------------------------------------------- | ------------------------- |
+| `5impl`         | Webhook routing, Canva API, Church activity sync, bulk ops internas | Manual                    |
+| `client-{slug}` | Automações entregues ao cliente (produto da consultoria)            | `WorkspaceProvisioner`    |
+| `church-{slug}` | Automações operacionais da Igreja                                   | `SubscriptionProvisioner` |
 
 ### Hermes (Email)
 
-| Profile | SMTP | Remetente | Criado por |
-|---|---|---|---|
-| `5impl` | Gmail + Brevo + Cloudflare | `*@5impl.is` | Manual |
-| `client-{slug}` | SMTP do cliente | `*@cliente.com` | `WorkspaceProvisioner` |
-| `church-{slug}` | SMTP da igreja (opcional) | Configura no onboarding | `OnboardingOrchestrator` |
+| Profile         | SMTP                       | Remetente               | Criado por               |
+| --------------- | -------------------------- | ----------------------- | ------------------------ |
+| `5impl`         | Gmail + Brevo + Cloudflare | `*@5impl.is`            | Manual                   |
+| `client-{slug}` | SMTP do cliente            | `*@cliente.com`         | `WorkspaceProvisioner`   |
+| `church-{slug}` | SMTP da igreja (opcional)  | Configura no onboarding | `OnboardingOrchestrator` |
 
 ## Fluxo de Criação de Tenant — Consultoria
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fluxo de criação de tenant — Consultoria
+
   participant SA as SignatureOrchestrator
   participant WP as WorkspaceProvisioner
   participant Socio as Sócio (HITL)
@@ -108,11 +110,15 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   WP->>DIR: criar instância Directus client-{slug}
   WP->>HM: configurar profile client-{slug} (smtp_credentials)
   WP->>DIR: registrar todos os IDs em Companies (5impl Directus)
-  WP->>HM: enviar email boas-vindas ao cliente`} caption="Fluxo de criação de tenant — Consultoria" />
+  WP->>HM: enviar email boas-vindas ao cliente
+```
 
 ## Fluxo de Criação de Tenant — Church SaaS
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fluxo de criação de tenant — Church SaaS
+
   participant GW as Gateway Financeiro
   participant SP as SubscriptionProvisioner
   participant DIR as Directus 5impl
@@ -126,17 +132,18 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   SP->>N8: criar tenant church-{slug}
   SP->>DIR: registrar URLs e IDs da instância
   SP->>ZR: enviar WhatsApp boas-vindas ao líder
-  SP-->>SP: disparar subscription_activated → OnboardingOrchestrator`} caption="Fluxo de criação de tenant — Church SaaS" />
+  SP-->>SP: disparar subscription_activated → OnboardingOrchestrator
+```
 
 ## Isolamento de Dados — Regras
 
-| Dado | Onde fica | Quem acessa |
-|---|---|---|
-| Dados do CRM (leads, deals) | Directus 5impl | Agentes Sales + CEO |
-| Contratos e propostas | Directus 5impl | Agentes Sales + Financial |
-| Dados de billing (subscriptions, addendums) | Directus 5impl | Agentes Financial + SaaS Church |
-| Feature flags da Church Platform | Directus 5impl (`Church_Subscriptions`) | Church Platform API (leitura) |
-| Dados da Igreja (membros, finanças, eventos) | Directus instância da igreja | Church Platform App |
-| Dados do produto do cliente B2B | Directus instância do cliente | Workspace do cliente |
-| Token usage | Directus 5impl (`Token_Usage`) | QuotaAuditor, FinancialReporter |
-| Configurações de agentes | Directus 5impl (Gatekeepers, Dunning_Rules, etc.) | Agentes correspondentes |
+| Dado                                         | Onde fica                                         | Quem acessa                     |
+| -------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| Dados do CRM (leads, deals)                  | Directus 5impl                                    | Agentes Sales + CEO             |
+| Contratos e propostas                        | Directus 5impl                                    | Agentes Sales + Financial       |
+| Dados de billing (subscriptions, addendums)  | Directus 5impl                                    | Agentes Financial + SaaS Church |
+| Feature flags da Church Platform             | Directus 5impl (`Church_Subscriptions`)           | Church Platform API (leitura)   |
+| Dados da Igreja (membros, finanças, eventos) | Directus instância da igreja                      | Church Platform App             |
+| Dados do produto do cliente B2B              | Directus instância do cliente                     | Workspace do cliente            |
+| Token usage                                  | Directus 5impl (`Token_Usage`)                    | QuotaAuditor, FinancialReporter |
+| Configurações de agentes                     | Directus 5impl (Gatekeepers, Dunning_Rules, etc.) | Agentes correspondentes         |

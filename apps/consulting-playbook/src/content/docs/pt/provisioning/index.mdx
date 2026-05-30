@@ -3,8 +3,6 @@ title: "Provisioning de Workspace"
 description: "Setup completo de novo workspace de cliente — checklist e automações de provisionamento."
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
-
 # Provisionamento de Workspace
 
 > Setup completo de um novo workspace de cliente de consultoria
@@ -15,7 +13,12 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 O provisionamento é acionado pelo `WorkspaceProvisioner` após a assinatura do contrato. Inclui um HITL obrigatório antes de qualquer recurso ser criado.
 
-<MermaidDiagram code={`flowchart TD
+---
+Fluxo completo de provisionamento de workspace de cliente
+
+```mermaid
+flowchart TD 
+
   A[proposal_signed] --> B[WorkspaceProvisioner acorda]
   B --> C{HITL Issue criada}
   C -->|Sócio preenche SMTP + aprova| D[provisioning_approved]
@@ -27,7 +30,8 @@ O provisionamento é acionado pelo `WorkspaceProvisioner` após a assinatura do 
   I --> J[Registra IDs no Directus 5impl]
   J --> K[Cria issue kickoff no workspace do cliente]
   K --> L[Email boas-vindas ao cliente]
-  L --> M[workspace_provisioned]`} caption="Fluxo completo de provisionamento de workspace de cliente" />
+  L --> M[workspace_provisioned]
+```
 
 ---
 
@@ -44,17 +48,20 @@ Quando o `WorkspaceProvisioner` é acionado, cria esta issue no Paperclip 5impl 
 **Valor mensal:** R$ {total_price}
 
 ### Milestones do Projeto
+
 - [ ] Milestone 1: {name} — R$ {value} — Prazo: {due_date}
 - [ ] Milestone 2: {name} — R$ {value} — Prazo: {due_date}
 
 ### Configurações Pendentes (preencher antes de aprovar)
-- **SMTP Host do cliente:** ___________
-- **SMTP Port:** ___________
-- **SMTP User:** ___________
-- **SMTP Password:** ___________
-- **From Email:** ___________
+
+- **SMTP Host do cliente:** ****\_\_\_****
+- **SMTP Port:** ****\_\_\_****
+- **SMTP User:** ****\_\_\_****
+- **SMTP Password:** ****\_\_\_****
+- **From Email:** ****\_\_\_****
 
 ### Recursos que serão criados
+
 - Paperclip workspace: `client-{slug}`
 - LiteLLM Virtual Key: `client-{slug}` (quota: {quota} tokens/mês)
 - n8n tenant: `client-{slug}`
@@ -77,34 +84,36 @@ O n8n da 5impl tem um workflow dedicado `workspace-bootstrap` que pode ser usado
 const { company_slug, plan_limits, smtp_credentials } = $input.body;
 
 // 1. Paperclip workspace
-const paperclipWs = await $http.post('${PAPERCLIP_API}/workspaces', {
+const paperclipWs = await $http.post("${PAPERCLIP_API}/workspaces", {
   name: `client-${company_slug}`,
-  plan: plan_limits.paperclip_tier
+  plan: plan_limits.paperclip_tier,
 });
 
 // 2. LiteLLM Virtual Key
-const litellmKey = await $http.post('${LITELLM_API}/key/generate', {
+const litellmKey = await $http.post("${LITELLM_API}/key/generate", {
   key_alias: `client-${company_slug}`,
   max_budget: plan_limits.token_quota_monthly,
-  metadata: { workspace: company_slug }
+  metadata: { workspace: company_slug },
 });
 
 // 3. n8n tenant (via n8n Cloud API ou self-hosted admin)
-const n8nTenant = await $http.post('${N8N_ADMIN_API}/tenants', {
-  name: company_slug
+const n8nTenant = await $http.post("${N8N_ADMIN_API}/tenants", {
+  name: company_slug,
 });
 
 // 4. Directus instance (via Coolify ou similar)
-const directusInstance = await $http.post('${COOLIFY_API}/v1/deploy', {
-  template: 'directus',
+const directusInstance = await $http.post("${COOLIFY_API}/v1/deploy", {
+  template: "directus",
   name: `directus-${company_slug}`,
-  env_vars: { /* Directus env */ }
+  env_vars: {
+    /* Directus env */
+  },
 });
 
 // 5. Hermes profile
-await $http.post('${HERMES_API}/profiles', {
+await $http.post("${HERMES_API}/profiles", {
   name: company_slug,
-  smtp: smtp_credentials
+  smtp: smtp_credentials,
 });
 
 // 6. Registra tudo no Directus 5impl
@@ -112,7 +121,7 @@ await $http.patch(`${DIRECTUS_5IMPL}/items/companies/${company_id}`, {
   paperclip_workspace_id: paperclipWs.id,
   litellm_virtual_key: litellmKey.key,
   n8n_workspace_id: n8nTenant.id,
-  directus_instance_url: directusInstance.url
+  directus_instance_url: directusInstance.url,
 });
 ```
 
@@ -138,6 +147,7 @@ Quando um projeto de consultoria é encerrado, os recursos devem ser desprovisio
 
 ```markdown
 Checklist de Offboarding (executado manualmente pelo Sócio):
+
 - [ ] Exportar dados do Directus do cliente (dump completo)
 - [ ] Exportar workflows n8n do tenant do cliente
 - [ ] Notificar cliente sobre prazo de acesso (30 dias)

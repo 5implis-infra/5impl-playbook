@@ -3,13 +3,15 @@ title: Lead → Contrato
 description: Fluxo completo de captura até assinatura — Waitlist, qualificação BANT, proposta, contrato PDF e assinatura digital.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **Captura → Qualificação → Proposta → Assinatura → Provisionamento**
 
 ## Diagrama de Sequência
 
-<MermaidDiagram code={`sequenceDiagram
+```mermaid
+sequenceDiagram
+  title Fluxo Lead → Contrato completo
+
   participant Lead
   participant ZR as Zernio / WhatsApp
   participant LC as LeadCapturer
@@ -58,9 +60,10 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
     SO->>WP: proposal_signed
   else Agenda cheia
     SQ->>Lead: "Fila prioritária para próximo mês"
-  else Desqualificado
+    else Desqualificado
     SQ->>LN: sequência nurture disqualified
-  end`} caption="Fluxo Lead → Contrato completo" />
+  end
+```
 
 ## Estados do Lead
 
@@ -73,42 +76,44 @@ new → nurturing → qualified → [won | lost | disqualified]
 ## Sequência de Nutrição — Configuração no Directus
 
 ### `Lead_Nurture_Sequences`
-| Campo | Tipo | Exemplo |
-|---|---|---|
-| `name` | string | "Waitlist Business PT" |
-| `vertical` | enum | `business` / `church` / `media` |
-| `trigger` | enum | `waitlist_signup` / `disqualified` |
+
+| Campo      | Tipo   | Exemplo                            |
+| ---------- | ------ | ---------------------------------- |
+| `name`     | string | "Waitlist Business PT"             |
+| `vertical` | enum   | `business` / `church` / `media`    |
+| `trigger`  | enum   | `waitlist_signup` / `disqualified` |
 
 ### `Lead_Nurture_Steps`
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `step_order` | int | Ordem de envio |
-| `delay_days` | int | Dias após o step anterior |
-| `channel` | enum | `email` / `whatsapp` |
-| `subject_template` | string | Assunto com variáveis |
-| `body_template` | string | Corpo com `{name}`, `{company}`, `{vertical}` |
+
+| Campo              | Tipo   | Descrição                                     |
+| ------------------ | ------ | --------------------------------------------- |
+| `step_order`       | int    | Ordem de envio                                |
+| `delay_days`       | int    | Dias após o step anterior                     |
+| `channel`          | enum   | `email` / `whatsapp`                          |
+| `subject_template` | string | Assunto com variáveis                         |
+| `body_template`    | string | Corpo com `{name}`, `{company}`, `{vertical}` |
 
 ## Qualificação BANT (SalesQualifier)
 
-| Dimensão | Pergunta padrão | Qualificador |
-|---|---|---|
-| **Budget** | "Qual o orçamento disponível para o projeto?" | > R$3k |
-| **Authority** | "Você é o decisor ou precisa de aprovação?" | Decisor direto |
-| **Need** | "Qual o principal processo que você quer automatizar?" | Dor clara e urgente |
-| **Timeline** | "Para quando você precisa implementado?" | < 90 dias |
+| Dimensão      | Pergunta padrão                                        | Qualificador        |
+| ------------- | ------------------------------------------------------ | ------------------- |
+| **Budget**    | "Qual o orçamento disponível para o projeto?"          | > R$3k              |
+| **Authority** | "Você é o decisor ou precisa de aprovação?"            | Decisor direto      |
+| **Need**      | "Qual o principal processo que você quer automatizar?" | Dor clara e urgente |
+| **Timeline**  | "Para quando você precisa implementado?"               | < 90 dias           |
 
 ## Estrutura da Proposta (Directus)
 
 ```typescript
 interface Proposal {
-  id: string
-  deal_id: string
-  company_id: string
-  status: 'draft' | 'sent' | 'approved' | 'signed' | 'rejected'
-  total_value: number
-  pdf_url?: string
-  signed_at?: datetime
-  items: ProposalItem[]          // serviços cotados
-  milestones: ConsultingMilestone[] // entregas e valores
+  id: string;
+  deal_id: string;
+  company_id: string;
+  status: "draft" | "sent" | "approved" | "signed" | "rejected";
+  total_value: number;
+  pdf_url?: string;
+  signed_at?: datetime;
+  items: ProposalItem[]; // serviços cotados
+  milestones: ConsultingMilestone[]; // entregas e valores
 }
 ```

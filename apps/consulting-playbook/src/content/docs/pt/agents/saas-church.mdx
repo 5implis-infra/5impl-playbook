@@ -3,13 +3,16 @@ title: SaaS Church Platform
 description: 7 agentes do ciclo de vida completo do assinante Church — ativação, onboarding, retenção, dunning e relatórios.
 ---
 
-import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
 
 > **7 agentes · Ciclo de vida completo do assinante Church Platform**
 
 ## Diagrama do Ciclo de Vida
 
-<MermaidDiagram code={`graph TD
+Ciclo de vida completo do assinante Church SaaS
+
+```mermaid
+graph TD
+
   GW[Gateway Financeiro]
   subgraph Ativação
     SP[SubscriptionProvisioner]
@@ -32,14 +35,15 @@ import MermaidDiagram from '@components/shared/MermaidDiagram.astro'
   CSD -.->|risco de churn| DM
   RM -.->|vencimento próximo| GW
   DM -->|cancel_subscription| SP
-  SP -.->|mensal| CR`} caption="Ciclo de vida completo do assinante Church SaaS" />
+  SP -.->|mensal| CR
+```
 
 ## SubscriptionProvisioner (`subscription_provisioner`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Webhook `payment_confirmed` com `product_type = 'church_base'` |
-| **Tools/MCPs** | `directus_mcp`, `http_tool` (Coolify), `zernio_tool` |
+| Campo          | Valor                                                          |
+| -------------- | -------------------------------------------------------------- |
+| **Trigger**    | Webhook `payment_confirmed` com `product_type = 'church_base'` |
+| **Tools/MCPs** | `directus_mcp`, `http_tool` (Coolify), `zernio_tool`           |
 
 Ativa a assinatura e provisiona a infraestrutura da Igreja no momento do primeiro pagamento. Cria `Church_Client` + `Church_Subscription` no Directus, POST no Coolify para provisionar container Docker, envia WhatsApp de boas-vindas com credenciais ao líder.
 
@@ -47,10 +51,10 @@ Ativa a assinatura e provisiona a infraestrutura da Igreja no momento do primeir
 
 ## ModuleActivator (`module_activator`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Webhook `payment_confirmed` com `product_type = 'addon'` |
-| **Tools/MCPs** | `directus_mcp`, `hermes_tool` |
+| Campo          | Valor                                                    |
+| -------------- | -------------------------------------------------------- |
+| **Trigger**    | Webhook `payment_confirmed` com `product_type = 'addon'` |
+| **Tools/MCPs** | `directus_mcp`, `hermes_tool`                            |
 
 Ativa um módulo adicional da Church Platform após compra do addon. Atualiza o `module_{name}` flag na coleção `Church_Subscriptions` e notifica o líder por email.
 
@@ -58,37 +62,37 @@ Ativa um módulo adicional da Church Platform após compra do addon. Atualiza o 
 
 ## OnboardingOrchestrator (`onboarding_orchestrator`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | `subscription_activated` |
+| Campo          | Valor                                        |
+| -------------- | -------------------------------------------- |
+| **Trigger**    | `subscription_activated`                     |
 | **Tools/MCPs** | `directus_mcp`, `zernio_tool`, `hermes_tool` |
 
 Executa a sequência de onboarding configurada em `Onboarding_Steps`:
 
-| Dia | Canal | Ação |
-|---|---|---|
-| D+0 | WhatsApp | Tour da plataforma + credenciais |
-| D+2 | WhatsApp | "Já cadastrou os membros?" |
-| D+5 | Email | Guia de gestão financeira |
-| D+7 | WhatsApp | Check-in de ativação |
-| D+10 | Email | Convite para call de sucesso |
+| Dia  | Canal    | Ação                             |
+| ---- | -------- | -------------------------------- |
+| D+0  | WhatsApp | Tour da plataforma + credenciais |
+| D+2  | WhatsApp | "Já cadastrou os membros?"       |
+| D+5  | Email    | Guia de gestão financeira        |
+| D+7  | WhatsApp | Check-in de ativação             |
+| D+10 | Email    | Convite para call de sucesso     |
 
 ---
 
 ## ChurnSignalDetector (`churn_signal_detector`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Cron todo Domingo às 22:00 |
+| Campo          | Valor                                                         |
+| -------------- | ------------------------------------------------------------- |
+| **Trigger**    | Cron todo Domingo às 22:00                                    |
 | **Tools/MCPs** | `directus_mcp`, `zernio_tool`, `hermes_tool`, `telegram_tool` |
 
 Analisa `Church_Clients.last_activity_at` para detectar risco de churn:
 
-| Inatividade | Ação |
-|---|---|
-| 14 dias | Telegram alerta ao Sócio |
-| 21 dias | WhatsApp + email de reengajamento ao líder |
-| 30 dias | Escala para Sócio + campanha de reativação |
+| Inatividade | Ação                                       |
+| ----------- | ------------------------------------------ |
+| 14 dias     | Telegram alerta ao Sócio                   |
+| 21 dias     | WhatsApp + email de reengajamento ao líder |
+| 30 dias     | Escala para Sócio + campanha de reativação |
 
 **Parâmetros:** `Company_Settings.churn_inactivity_warning_days` / `churn_inactivity_critical_days`
 
@@ -96,9 +100,9 @@ Analisa `Church_Clients.last_activity_at` para detectar risco de churn:
 
 ## RenewalManager (`renewal_manager`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Cron diário às 07:00 |
+| Campo          | Valor                                                            |
+| -------------- | ---------------------------------------------------------------- |
+| **Trigger**    | Cron diário às 07:00                                             |
 | **Tools/MCPs** | `directus_mcp`, `hermes_tool`, `zernio_tool`, `gateway_api_tool` |
 
 Verifica `next_billing_date` de todas as assinaturas ativas. Envia lembretes ao líder com 7, 3 e 1 dia(s) antes do vencimento. Se renovação bem-sucedida, atualiza `next_billing_date`.
@@ -107,28 +111,28 @@ Verifica `next_billing_date` de todas as assinaturas ativas. Envia lembretes ao 
 
 ## DunningManager (`dunning_manager`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Webhook `payment_failed` do Gateway |
+| Campo          | Valor                                                            |
+| -------------- | ---------------------------------------------------------------- |
+| **Trigger**    | Webhook `payment_failed` do Gateway                              |
 | **Tools/MCPs** | `directus_mcp`, `zernio_tool`, `hermes_tool`, `gateway_api_tool` |
 
 Executa a régua de cobrança configurada em `Dunning_Rules`:
 
-| Dia | Ação |
-|---|---|
-| D+0 | WhatsApp + email: "Pagamento não processado" |
-| D+3 | Nova tentativa de cobrança + WhatsApp |
-| D+7 | Alerta crítico + link de atualização de cartão |
-| D+15 | Suspensão de acesso |
-| D+30 | Cancelamento + dispara `cancel_subscription` |
+| Dia  | Ação                                           |
+| ---- | ---------------------------------------------- |
+| D+0  | WhatsApp + email: "Pagamento não processado"   |
+| D+3  | Nova tentativa de cobrança + WhatsApp          |
+| D+7  | Alerta crítico + link de atualização de cartão |
+| D+15 | Suspensão de acesso                            |
+| D+30 | Cancelamento + dispara `cancel_subscription`   |
 
 ---
 
 ## ChurchReporter (`church_reporter`)
 
-| Campo | Valor |
-|---|---|
-| **Trigger** | Cron dia 1 de cada mês às 08:00 |
+| Campo          | Valor                                          |
+| -------------- | ---------------------------------------------- |
+| **Trigger**    | Cron dia 1 de cada mês às 08:00                |
 | **Tools/MCPs** | `directus_mcp`, `hermes_tool`, `telegram_tool` |
 
 Gera relatório mensal consolidado: MRR, churn rate, novas ativações, módulos mais usados, tickets de suporte. Envia por Telegram ao Sócio e por email ao time.
