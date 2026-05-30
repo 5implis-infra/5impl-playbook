@@ -6,8 +6,47 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  apps/consulting-b2b:
     dependencies:
+      '@5implis/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
+      '@astrojs/mdx':
+        specifier: ^5.0.6
+        version: 5.0.6(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
+      '@astrojs/starlight':
+        specifier: ^0.39.2
+        version: 0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)
+      astro:
+        specifier: ^6.3.1
+        version: 6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)
+      sharp:
+        specifier: ^0.34.5
+        version: 0.34.5
+      starlight-auto-sidebar:
+        specifier: ^0.4.0
+        version: 0.4.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
+      starlight-heading-badges:
+        specifier: ^0.7.0
+        version: 0.7.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
+      starlight-scroll-to-top:
+        specifier: ^1.0.1
+        version: 1.0.1(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
+    devDependencies:
+      '@unocss/astro':
+        specifier: ^66.7.0
+        version: 66.7.0(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0))
+      unocss:
+        specifier: ^66.7.0
+        version: 66.7.0(@unocss/astro@66.7.0(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0)))(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0))
+
+  apps/consulting-playbook:
+    dependencies:
+      '@5implis/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
       '@astrojs/mdx':
         specifier: ^5.0.6
         version: 5.0.6(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
@@ -26,12 +65,9 @@ importers:
       starlight-auto-sidebar:
         specifier: ^0.4.0
         version: 0.4.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
-      starlight-codeblock-fullscreen:
-        specifier: ^1.0.0
-        version: 1.0.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
       starlight-copy-button:
         specifier: github:dionysuzx/starlight-copy-button
-        version: git+https://git@github.com:dionysuzx/starlight-copy-button.git#d570fcab6824127f80076eb419f39fb4fbd9de09(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
+        version: https://codeload.github.com/dionysuzx/starlight-copy-button/tar.gz/d570fcab6824127f80076eb419f39fb4fbd9de09(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))
       starlight-heading-badges:
         specifier: ^0.7.0
         version: 0.7.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))
@@ -54,6 +90,8 @@ importers:
       unocss:
         specifier: ^66.7.0
         version: 66.7.0(@unocss/astro@66.7.0(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0)))(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0))
+
+  packages/design-system: {}
 
 packages:
 
@@ -2345,14 +2383,8 @@ packages:
     peerDependencies:
       '@astrojs/starlight': '>=0.39.0'
 
-  starlight-codeblock-fullscreen@1.0.0:
-    resolution: {integrity: sha512-rdnAY0NoXF3VzKO5YO40y4FfvdYAeX5Gsl4x/RnM2IIMuNNSUIcpooI8iixZ98y/cVL5sLzpVpjpTAS+45kafQ==}
-    engines: {node: '>=22.12.0'}
-    peerDependencies:
-      '@astrojs/starlight': '>=0.38.0'
-
-  starlight-copy-button@git+https://git@github.com:dionysuzx/starlight-copy-button.git#d570fcab6824127f80076eb419f39fb4fbd9de09:
-    resolution: {commit: d570fcab6824127f80076eb419f39fb4fbd9de09, repo: git@github.com:dionysuzx/starlight-copy-button.git, type: git}
+  starlight-copy-button@https://codeload.github.com/dionysuzx/starlight-copy-button/tar.gz/d570fcab6824127f80076eb419f39fb4fbd9de09:
+    resolution: {gitHosted: true, integrity: sha512-NAOJG8sx00BCyXwS6rIQDMEq5dEAff9V2LQkEUAswujVBR8BtafucsyWKsZKVMgbirqqXH0NvHAYn5paW0wIDw==, tarball: https://codeload.github.com/dionysuzx/starlight-copy-button/tar.gz/d570fcab6824127f80076eb419f39fb4fbd9de09}
     version: 0.1.0
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
     peerDependencies:
@@ -5620,11 +5652,7 @@ snapshots:
       '@astrojs/starlight': 0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)
       github-slugger: 2.0.0
 
-  starlight-codeblock-fullscreen@1.0.0(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)):
-    dependencies:
-      '@astrojs/starlight': 0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)
-
-  starlight-copy-button@git+https://git@github.com:dionysuzx/starlight-copy-button.git#d570fcab6824127f80076eb419f39fb4fbd9de09(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)):
+  starlight-copy-button@https://codeload.github.com/dionysuzx/starlight-copy-button/tar.gz/d570fcab6824127f80076eb419f39fb4fbd9de09(@astrojs/starlight@0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3))(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)):
     dependencies:
       '@astrojs/starlight': 0.39.2(astro@6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4))(typescript@5.9.3)
       astro: 6.3.8(@types/node@24.12.4)(jiti@2.7.0)(rollup@4.60.4)

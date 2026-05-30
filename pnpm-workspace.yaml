@@ -1,4 +1,7 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+
 allowBuilds:
-  esbuild: false
+  esbuild: true
   sharp: true
-  typesense-instantsearch-adapter: set this to true or false
