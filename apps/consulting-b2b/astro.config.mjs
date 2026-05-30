@@ -28,6 +28,7 @@ export default defineConfig({
       ],
       customCss: ['@5implis/design-system/styles'],
       components: {
+        ThemeSelect: '@5implis/design-system/components/ThemeToggle',
         Head: './src/components/overrides/Head.astro',
         Footer: './src/components/overrides/Footer.astro',
         PageFrame: './src/components/overrides/PageFrame.astro',
