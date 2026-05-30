@@ -1,11 +1,16 @@
 {
-  "name": "5impl-docs",
+  "name": "5implis-docs-monorepo",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
+  "workspaces": ["portal"],
   "scripts": {
     "dev": "astro dev",
+    "dev:portal": "npm run dev --workspace=portal",
     "start": "astro dev",
     "build": "astro build",
+    "build:portal": "npm run build --workspace=portal",
+    "build:all": "astro build && npm run build --workspace=portal",
     "preview": "astro preview",
     "astro": "astro"
   },
