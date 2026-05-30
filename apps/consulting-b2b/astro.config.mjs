@@ -26,7 +26,7 @@ export default defineConfig({
       social: [
         { icon: 'external', label: 'Site', href: 'https://5implis.com' },
       ],
-      customCss: ['./src/styles/custom.css'],
+      customCss: ['@5implis/design-system/styles'],
       components: {
         Head: './src/components/overrides/Head.astro',
         Footer: './src/components/overrides/Footer.astro',

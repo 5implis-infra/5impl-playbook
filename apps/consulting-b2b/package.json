@@ -1,14 +1,14 @@
 {
-  "name": "5implis-portal",
+  "name": "consulting-b2b",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --port 4322",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "astro preview"
   },
   "dependencies": {
+    "@5implis/design-system": "workspace:*",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/starlight": "^0.39.2",
     "astro": "^6.3.1",

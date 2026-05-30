@@ -34,7 +34,7 @@ export default defineConfig({
           { icon: 'github', label: 'GitHub', href: 'https://github.com/5implis-infra' },
           { icon: 'external', label: 'Site', href: 'https://5impl.is' },
         ],
-        customCss: ['./src/styles/custom.css'],
+        customCss: ['@5implis/design-system/styles'],
         components: {
           Head: './src/components/overrides/Head.astro',
           Footer: './src/components/overrides/Footer.astro',

@@ -1,0 +1,8 @@
+{
+  "name": "@5implis/design-system",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    "./styles": "./src/styles/custom.css"
+  }
+}
