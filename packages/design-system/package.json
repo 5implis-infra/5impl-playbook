@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     "./styles": "./src/styles/custom.css",
+    "./components/Header": "./src/components/Header.astro",
     "./components/ThemeToggle": "./src/components/ThemeToggle.astro",
     "./components/LangToggle": "./src/components/LangToggle.astro"
   }

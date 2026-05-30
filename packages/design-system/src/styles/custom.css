@@ -89,6 +89,20 @@
 }
 
 /* ============================================================
+   LIGHT MODE — STARLIGHT INTERNAL OVERRIDES
+   Starlight renders certain elements (page title, etc.) using
+   --sl-color-white assuming a dark background. Override those
+   explicitly so they remain readable on a light page.
+   ============================================================ */
+[data-theme='light'] .content-panel .sl-container h1 {
+  color: var(--sl-heading-color) !important;
+}
+
+[data-theme='light'] .right-sidebar-panel h2 {
+  color: var(--sl-color-gray-2) !important;
+}
+
+/* ============================================================
    GLOBAL RESETS & BASE
    ============================================================ */
 * {
@@ -170,6 +184,10 @@ nav.sidebar-content a {
 .sidebar a:hover {
   color: var(--sl-color-white);
   background: var(--sl-color-gray-6);
+}
+
+[data-theme='light'] .sidebar a:hover {
+  color: var(--sl-color-gray-1);
 }
 
 /* Active sidebar link — teal accent like Docus */

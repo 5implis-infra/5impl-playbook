@@ -9,6 +9,9 @@ import UnoCSS from 'unocss/astro'
 
 export default defineConfig({
   site: 'https://cliente.5implis.com/',
+  redirects: {
+    '/': '/pt/',
+  },
   integrations: [
     UnoCSS(),
     starlight({
@@ -22,16 +25,18 @@ export default defineConfig({
       defaultLocale: 'pt',
       locales: {
         pt: { label: 'Português', lang: 'pt-BR' },
+        en: { label: 'English', lang: 'en' },
       },
       social: [
         { icon: 'external', label: 'Site', href: 'https://5implis.com' },
       ],
       customCss: ['@5implis/design-system/styles'],
       components: {
+        Header: '@5implis/design-system/components/Header',
         ThemeSelect: '@5implis/design-system/components/ThemeToggle',
+        LanguageSelect: '@5implis/design-system/components/LangToggle',
         Head: './src/components/overrides/Head.astro',
         Footer: './src/components/overrides/Footer.astro',
-        PageFrame: './src/components/overrides/PageFrame.astro',
       },
       expressiveCode: {
         themes: ['dark-plus', 'github-light'],

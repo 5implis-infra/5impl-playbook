@@ -36,11 +36,11 @@ export default defineConfig({
         ],
         customCss: ['@5implis/design-system/styles'],
         components: {
+          Header: '@5implis/design-system/components/Header',
           ThemeSelect: '@5implis/design-system/components/ThemeToggle',
           LanguageSelect: '@5implis/design-system/components/LangToggle',
           Head: './src/components/overrides/Head.astro',
           Footer: './src/components/overrides/Footer.astro',
-          PageFrame: './src/components/overrides/PageFrame.astro',
         },
         expressiveCode: {
           themes: ['dark-plus', 'github-light'],
