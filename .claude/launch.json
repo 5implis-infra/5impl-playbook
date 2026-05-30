@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "consulting-playbook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "consulting-playbook", "dev"],
+      "port": 4321
+    },
+    {
+      "name": "consulting-b2b",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "consulting-b2b", "dev"],
+      "port": 4322
+    }
+  ]
+}

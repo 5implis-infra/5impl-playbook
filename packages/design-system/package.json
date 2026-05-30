@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "exports": {
-    "./styles": "./src/styles/custom.css"
+    "./styles": "./src/styles/custom.css",
+    "./components/ThemeToggle": "./src/components/ThemeToggle.astro",
+    "./components/LangToggle": "./src/components/LangToggle.astro"
   }
 }
