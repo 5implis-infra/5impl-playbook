@@ -1,0 +1,25 @@
+{
+  "id": "70789933",
+  "phase": "steer_requested",
+  "pageUrl": "http://localhost:4321/pt",
+  "sourceFile": null,
+  "expectedVariants": 0,
+  "arrivedVariants": 0,
+  "visibleVariant": null,
+  "paramValues": {},
+  "pendingEventSeq": 1,
+  "pendingEvent": {
+    "type": "steer",
+    "id": "70789933",
+    "message": "fix anti patterns",
+    "pageUrl": "http://localhost:4321/pt"
+  },
+  "deliveryLease": null,
+  "checkpointRevision": 0,
+  "activeOwner": null,
+  "sourceMarkers": {},
+  "fallbackMode": null,
+  "annotationArtifacts": [],
+  "diagnostics": [],
+  "updatedAt": "2026-05-30T01:21:45.667Z"
+}

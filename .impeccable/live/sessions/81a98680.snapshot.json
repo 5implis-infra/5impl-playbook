@@ -1,0 +1,25 @@
+{
+  "id": "81a98680",
+  "phase": "agent_error",
+  "pageUrl": "/pt/agents/financial/",
+  "sourceFile": null,
+  "expectedVariants": 3,
+  "arrivedVariants": 0,
+  "visibleVariant": 0,
+  "paramValues": {},
+  "pendingEventSeq": null,
+  "pendingEvent": null,
+  "deliveryLease": null,
+  "checkpointRevision": 1,
+  "activeOwner": "9497318a",
+  "sourceMarkers": {},
+  "fallbackMode": null,
+  "annotationArtifacts": [],
+  "diagnostics": [
+    {
+      "error": "agent_error",
+      "message": "Starlight template element not in source; browser disconnected"
+    }
+  ],
+  "updatedAt": "2026-05-30T01:14:39.209Z"
+}

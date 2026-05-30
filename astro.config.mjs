@@ -37,6 +37,8 @@ export default defineConfig({
         customCss: ['./src/styles/custom.css'],
         components: {
           Head: './src/components/overrides/Head.astro',
+          Footer: './src/components/overrides/Footer.astro',
+          PageFrame: './src/components/overrides/PageFrame.astro',
         },
         expressiveCode: {
           themes: ['dark-plus', 'github-light'],

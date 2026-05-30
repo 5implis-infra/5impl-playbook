@@ -1,0 +1,25 @@
+{
+  "id": "79776446",
+  "phase": "agent_error",
+  "pageUrl": "/pt/agents/financial/",
+  "sourceFile": null,
+  "expectedVariants": 3,
+  "arrivedVariants": 0,
+  "visibleVariant": 0,
+  "paramValues": {},
+  "pendingEventSeq": null,
+  "pendingEvent": null,
+  "deliveryLease": null,
+  "checkpointRevision": 1,
+  "activeOwner": "600eb277",
+  "sourceMarkers": {},
+  "fallbackMode": null,
+  "annotationArtifacts": [],
+  "diagnostics": [
+    {
+      "error": "agent_error",
+      "message": "Browser disconnected; will handle on next session"
+    }
+  ],
+  "updatedAt": "2026-05-30T01:16:23.240Z"
+}

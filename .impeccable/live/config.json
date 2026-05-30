@@ -1,5 +1,5 @@
 {
-  "files": ["src/components/overrides/Head.astro"],
+  "files": ["src/components/overrides/PageFrame.astro"],
   "insertBefore": "</Default>",
   "commentSyntax": "html",
   "cspChecked": true

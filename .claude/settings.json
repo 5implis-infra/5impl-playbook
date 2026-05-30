@@ -11,7 +11,29 @@
       "Bash(cp /tmp/5impl-docs/astro.config.mjs /home/itbrda/dev/5impl.is/5impl-playbook/astro.config.mjs)",
       "Bash(cp /tmp/5impl-docs/tsconfig.json /home/itbrda/dev/5impl.is/5impl-playbook/tsconfig.json)",
       "Bash(yes)",
-      "Bash(node .claude/skills/i-impeccable/scripts/context.mjs)"
+      "Bash(node .claude/skills/i-impeccable/scripts/context.mjs)",
+      "Bash(pnpm dev *)",
+      "Bash(curl -s http://localhost:4321/)",
+      "Bash(pkill -f \"astro dev\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live.mjs)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321/pt/)",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-poll.mjs)",
+      "Bash(curl -s http://localhost:8400/live.js)",
+      "Bash(curl -s http://localhost:4321/pt/)",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-cleanup.mjs)",
+      "Bash(xargs -I{} basename {})",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-status.mjs)",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-wrap.mjs --id 81a98680 --count 3 --element-id \"\" --classes \"sl-container,astro-3irwy2wc\" --tag \"div\" --text \"5 agentes · Quota de LLM, billing recorrente\")",
+      "Bash(echo \"poll_pid=$!\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-wrap.mjs --id 79776446 --count 3 --element-id \"\" --classes \"\" --tag \"ol\" --text \"Busca Consulting_Milestones no Directus\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-wrap.mjs --id 79776446 --count 3 --element-id \"\" --classes \"\" --tag \"ol\" --text \"Busca Consulting_Milestones no Directus\" --query \"Busca Consulting_Milestones\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-poll.mjs --reply 81a98680 error \"Starlight template element not in source; browser disconnected\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-poll.mjs --reply 79776446 error \"Browser disconnected; will handle on next session\")",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-server.mjs stop --keep-inject)",
+      "Bash(lsof -ti:4321)",
+      "Bash(lsof -ti:8400)",
+      "Bash(node .claude/skills/i-impeccable/scripts/live-wrap.mjs --id e4030ed4 --count 3 --element-id \"\" --classes \"card,sl-flex,astro-irwfjwdm\" --tag \"article\" --text \"Arquitetura C4 Context, Containers, Multi-Tenant.\")"
     ]
   }
 }

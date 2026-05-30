@@ -285,10 +285,10 @@ details > summary {
 
 /* Blockquote — styled like Docus callout */
 .sl-markdown-content blockquote {
-  border-left: 3px solid var(--sl-color-accent);
+  border: 1px solid var(--sl-color-border);
   background: var(--sl-color-accent-low);
   padding: 0.875rem 1.25rem;
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0.5rem;
   margin: 1.5rem 0;
   color: var(--sl-color-gray-1);
   font-size: 0.9rem;
@@ -441,12 +441,10 @@ starlight-toc,
 .hero h1 {
   font-family: 'Syne', sans-serif !important;
   font-weight: 800 !important;
-  font-size: 3rem !important;
-  background: linear-gradient(135deg, #7B3FE4, #C84BE8, #00C9A7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(2.25rem, 5vw, 3rem) !important;
+  color: var(--sl-color-white) !important;
   line-height: 1.1 !important;
+  text-wrap: balance;
 }
 
 .hero .tagline {
@@ -454,6 +452,7 @@ starlight-toc,
   font-size: 1.1rem;
   max-width: 40rem;
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* Hero actions */
@@ -466,15 +465,13 @@ starlight-toc,
 }
 
 .hero .action.primary {
-  background: linear-gradient(135deg, #7B3FE4, #C84BE8) !important;
-  border: none !important;
-  color: white !important;
+  background: var(--sl-color-accent) !important;
+  border: 1px solid var(--sl-color-accent) !important;
+  color: #0D0D14 !important;
 }
 
 .hero .action.primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(123, 63, 228, 0.35);
+  opacity: 0.88;
 }
 
 .hero .action.secondary {
@@ -588,4 +585,17 @@ hr {
   background: var(--sl-color-accent-low);
   color: var(--sl-color-accent-high);
   border: 1px solid color-mix(in srgb, var(--sl-color-accent) 30%, transparent);
+}
+
+/* ============================================================
+   ASIDE / CALLOUT — full border, no side-stripe
+   ============================================================ */
+.starlight-aside {
+  border-inline-start: none !important;
+  border: 1px solid var(--sl-color-border) !important;
+  border-radius: 0.5rem !important;
+}
+
+.starlight-aside__title {
+  padding-inline-start: 0 !important;
 }
